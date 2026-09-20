@@ -1,0 +1,3457 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Options Lab Master — Capped-Risk Interactive Guide</title>
+<style>
+  :root {
+    --bg: #0b1016;
+    --panel: #121a24;
+    --line: #293443;
+    --text: #eef3fa;
+    --muted: #a7b6c8;
+    --mint: #9ceeab;
+    --blue: #7ebaff;
+    --amber: #ffd089;
+    --loss: #ffada3;
+    --soft: #1b2733;
+    --card-bg: #0d151e;
+  }
+
+  /* Theme Transitions & Light Variables */
+  html {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  html[data-theme="light"] {
+    --bg: #f5f8fb;
+    --panel: #ffffff;
+    --line: #d8e2ed;
+    --text: #1a2330;
+    --muted: #475569;
+    --mint: #0e8a40;
+    --blue: #1d6fd6;
+    --amber: #b86e00;
+    --loss: #cf222e;
+    --soft: #eef4fb;
+    --card-bg: #ffffff;
+  }
+
+  /* Light theme overrides for custom dark panels & elements */
+  html[data-theme="light"] aside {
+    background: #edf2f8;
+    border-right-color: var(--line);
+  }
+  html[data-theme="light"] .topbar {
+    background: #edf2f8;
+    border-bottom-color: var(--line);
+  }
+  html[data-theme="light"] nav button:hover {
+    background: #e1e9f2;
+  }
+  html[data-theme="light"] nav button.active {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #0e8a40;
+  }
+  html[data-theme="light"] .card {
+    background: #ffffff;
+    border-color: #d8e2ed;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  html[data-theme="light"] .stat-box {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+  }
+  html[data-theme="light"] .visual-card {
+    background: #0d151e;
+    border-color: #243142;
+  }
+  html[data-theme="light"] .visual-title {
+    color: #eef3fa;
+  }
+  html[data-theme="light"] .visual-caption {
+    color: #cbd5e1;
+  }
+  html[data-theme="light"] .callout {
+    background: #eff6ff;
+    border-left-color: #2563eb;
+    color: #1e3a8a;
+  }
+  html[data-theme="light"] .callout strong {
+    color: #1e40af;
+  }
+  html[data-theme="light"] .callout-warn {
+    background: #fffbeb;
+    border-left-color: #d97706;
+    color: #78350f;
+  }
+  html[data-theme="light"] .callout-warn strong {
+    color: #92400e;
+  }
+  html[data-theme="light"] .setup-panel {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+  html[data-theme="light"] .formula-banner {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+  }
+  html[data-theme="light"] .contracts-box {
+    background: #ecfdf5;
+    border-color: #059669;
+  }
+  html[data-theme="light"] .quiz-container {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+  html[data-theme="light"] .quiz-option {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: var(--text);
+  }
+  html[data-theme="light"] .quiz-option:hover {
+    background: #f1f5f9;
+  }
+  html[data-theme="light"] .mobile-select {
+    background: #ffffff;
+    color: var(--text);
+    border-color: #cbd5e1;
+  }
+  html[data-theme="light"] .theme-btn {
+    border-color: #cbd5e1;
+    color: var(--text);
+  }
+  html[data-theme="light"] .theme-btn:hover {
+    background: #e2e8f0;
+  }
+  html[data-theme="light"] input,
+  html[data-theme="light"] select {
+    background: #ffffff;
+    color: var(--text);
+    border-color: #cbd5e1;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 100vh;
+  }
+  aside {
+    background: #0d141d;
+    border-right: 1px solid var(--line);
+    padding: 24px 16px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .brand {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--mint);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-group { margin-bottom: 20px; }
+  .nav-header {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  nav button {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--muted);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-bottom: 4px;
+    transition: all 0.15s ease;
+  }
+  nav button:hover { background: #1a2634; color: var(--text); }
+  nav button.active {
+    background: #1b2e24;
+    color: var(--mint);
+    border-color: #2e4d3b;
+    font-weight: 600;
+  }
+  main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .content-container {
+    padding: 32px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  h1, h2, h3 { color: var(--text); margin-top: 0; }
+  .eyebrow {
+    color: var(--mint);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .lead {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .stat-box {
+    background: #090e13;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-val {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 6px 0;
+    color: var(--text);
+  }
+  .stat-val.positive { color: var(--mint); }
+  .stat-val.negative { color: var(--loss); }
+  .callout {
+    background: #11202e;
+    border-left: 4px solid var(--blue);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .callout-warn {
+    background: #261b11;
+    border-left: 4px solid var(--amber);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .setup-panel {
+    background: #090e13;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+  }
+  .formula-banner {
+    text-align: center;
+    padding: 14px;
+    background: #090e13;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 16px 0;
+  }
+  .contracts-box {
+    border: 2px solid var(--mint);
+    background: #14281e;
+  }
+  .field { margin-bottom: 14px; }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  input, select {
+    width: 100%;
+    padding: 9px 12px;
+    background: #090e13;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--mint);
+  }
+  .small { font-size: 12px; }
+  .muted { color: var(--muted); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #121c27;
+    border: 1px solid var(--line);
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: all 0.15s ease;
+  }
+  .quiz-option:hover {
+    background: #1a2837;
+    border-color: var(--mint);
+  }
+  .quiz-option.correct {
+    background: #14281e !important;
+    border-color: var(--mint) !important;
+    color: var(--mint) !important;
+  }
+  .quiz-option.wrong {
+    background: #2f1717 !important;
+    border-color: var(--loss) !important;
+    color: var(--loss) !important;
+  }
+  .tablewrap {
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+  .visual-card {
+    background: #0d151e;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .visual-card svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  .visual-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .visual-caption {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .tag-mint { background: #183323; color: var(--mint); border: 1px solid #2e4d3b; }
+  .tag-loss { background: #3a1c1c; color: var(--loss); border: 1px solid #5a2e2e; }
+  .tag-blue { background: #17263c; color: var(--blue); border: 1px solid #28446b; }
+  .tag-amber { background: #332612; color: var(--amber); border: 1px solid #5c431e; }
+  .quiz-container {
+    background: #0e1722;
+    border: 1px solid #2d3c4d;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 24px;
+  }
+  .quiz-feedback {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: none;
+    line-height: 1.5;
+  }
+  .quiz-feedback.positive {
+    background: #14281e;
+    border: 1px solid #2e5940;
+    color: var(--mint);
+  }
+  .quiz-feedback.negative {
+    background: #2f1717;
+    border: 1px solid #632e2e;
+    color: var(--loss);
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  /* Topbar & Header */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px;
+    background: #0d141d;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    max-width: 650px;
+  }
+  .mobile-brand {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--mint);
+    white-space: nowrap;
+    display: none;
+  }
+  .mobile-select {
+    width: 100%;
+    padding: 8px 12px;
+    background: #090e13;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    display: none;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .theme-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+  .theme-btn:hover {
+    background: var(--soft);
+  }
+
+  /* Range Sliders */
+  input[type="range"] {
+    accent-color: var(--mint);
+  }
+
+  /* Responsive Mobile Breakpoints */
+  @media (max-width: 850px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    aside {
+      display: none;
+    }
+    .mobile-brand {
+      display: block;
+    }
+    .mobile-select {
+      display: block;
+    }
+    .topbar {
+      padding: 10px 16px;
+    }
+    .content-container {
+      padding: 16px 14px;
+    }
+    .card {
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .grid-2, .grid-3 {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .stat-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .stat-val {
+      font-size: 18px;
+    }
+    .visual-card {
+      padding: 12px;
+      margin: 14px 0;
+    }
+    .visual-card svg {
+      width: 100%;
+      height: auto;
+      max-height: 280px;
+    }
+    h1 {
+      font-size: 24px;
+      line-height: 1.25;
+    }
+    .tablewrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .tablewrap table {
+      min-width: 580px;
+    }
+    th, td {
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside>
+    <div class="brand">📈 Options Lab Master</div>
+    
+    <div class="nav-group">
+      <div class="nav-header">Phase 1: Foundations</div>
+      <nav>
+        <button class="nav-btn active" onclick="showTab('m1_1')">1.1 Anatomy & Rights</button>
+        <button class="nav-btn" onclick="showTab('m1_2')">1.2 Chains & Moneyness</button>
+        <button class="nav-btn" onclick="showTab('m1_3')">1.3 Payoff Diagrams</button>
+        <button class="nav-btn" onclick="showTab('m1_4')">1.4 Expectancy & Myths</button>
+        <button class="nav-btn" onclick="showTab('m1_5')">1.5 Expiration & Settlement</button>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-header">Phase 2: Screening & Edge</div>
+      <nav>
+        <button class="nav-btn" onclick="showTab('m2_1')">2.1 The Greeks</button>
+        <button class="nav-btn" onclick="showTab('m2_2')">2.2 Volatility & Edge</button>
+        <button class="nav-btn" onclick="showTab('m2_3')">2.3 Financial Statements</button>
+        <button class="nav-btn" onclick="showTab('m2_4')">2.4 Stock Screener Recipe</button>
+        <button class="nav-btn" onclick="showTab('m2_5')">2.5 ETF Screener Recipe</button>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-header">Phase 3: Strategies</div>
+      <nav>
+        <button class="nav-btn" onclick="showTab('m3_1')">3.1 Credit Spreads</button>
+        <button class="nav-btn" onclick="showTab('m3_2')">3.2 Debit Spreads</button>
+        <button class="nav-btn" onclick="showTab('m3_3')">3.3 Poor Man's Covered Call</button>
+        <button class="nav-btn" onclick="showTab('m3_4')">3.4 Small-Account Wheel</button>
+        <button class="nav-btn" onclick="showTab('m3_5')">3.5 Iron Condors</button>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-header">Phase 4: Risk & Execution</div>
+      <nav>
+        <button class="nav-btn" onclick="showTab('m4_1')">4.1 $10k Allocation Model</button>
+        <button class="nav-btn" onclick="showTab('m4_2')">4.2 Position Sizing Formula</button>
+        <button class="nav-btn" onclick="showTab('m4_3')">4.3 Midpoints & Slippage</button>
+        <button class="nav-btn" onclick="showTab('m4_4')">4.4 Exits & Rolling</button>
+        <button class="nav-btn" onclick="showTab('m4_5')">4.5 7-Point Pre-Trade Gate</button>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-header">Interactive Tools</div>
+      <nav>
+        <button class="nav-btn" onclick="showTab('tool_payoff')">📊 Payoff Lab</button>
+        <button class="nav-btn" onclick="showTab('tool_calc')">🧮 Sizer & Expectancy</button>
+      </nav>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="mobile-brand">📈 Options Lab</span>
+        <select id="mobileLesson" class="mobile-select" onchange="showTab(this.value)" aria-label="Select module">
+          <optgroup label="Phase 1: Foundations">
+            <option value="m1_1">1.1 Anatomy & Rights</option>
+            <option value="m1_2">1.2 Chains & Moneyness</option>
+            <option value="m1_3">1.3 Payoff Diagrams</option>
+            <option value="m1_4">1.4 Expectancy & Myths</option>
+            <option value="m1_5">1.5 Expiration & Settlement</option>
+          </optgroup>
+          <optgroup label="Phase 2: Screening & Edge">
+            <option value="m2_1">2.1 The Greeks</option>
+            <option value="m2_2">2.2 Volatility & Edge</option>
+            <option value="m2_3">2.3 Financial Statements</option>
+            <option value="m2_4">2.4 Stock Screener Recipe</option>
+            <option value="m2_5">2.5 ETF Screener Recipe</option>
+          </optgroup>
+          <optgroup label="Phase 3: Strategies">
+            <option value="m3_1">3.1 Credit Spreads</option>
+            <option value="m3_2">3.2 Debit Spreads</option>
+            <option value="m3_3">3.3 Poor Man's Covered Call</option>
+            <option value="m3_4">3.4 Small-Account Wheel</option>
+            <option value="m3_5">3.5 Iron Condors</option>
+          </optgroup>
+          <optgroup label="Phase 4: Risk & Execution">
+            <option value="m4_1">4.1 $10k Allocation Model</option>
+            <option value="m4_2">4.2 Position Sizing Formula</option>
+            <option value="m4_3">4.3 Midpoints & Slippage</option>
+            <option value="m4_4">4.4 Exits & Rolling</option>
+            <option value="m4_5">4.5 7-Point Pre-Trade Gate</option>
+          </optgroup>
+          <optgroup label="Interactive Tools">
+            <option value="tool_payoff">📊 Payoff Lab</option>
+            <option value="tool_calc">🧮 Sizer & Expectancy</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="topbar-right">
+        <button id="themeToggleBtn" onclick="toggleTheme()" class="theme-btn" title="Toggle theme">☀️ Light</button>
+      </div>
+    </header>
+
+    <div id="content" class="content-container">
+      <!-- Content rendering -->
+    </div>
+  </main>
+</div>
+
+<script>
+const tabs = {
+  // Phase 1
+  m1_1: `
+    <div class="visual-card" style="margin-top:0; padding:10px; margin-bottom:24px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="100%" style="height:auto; display:block;">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1016" />
+      <stop offset="50%" stop-color="#101924" />
+      <stop offset="100%" stop-color="#080d13" />
+    </linearGradient>
+    <linearGradient id="mint-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9ceeab" stop-opacity="0.2" />
+      <stop offset="50%" stop-color="#9ceeab" stop-opacity="1" />
+      <stop offset="100%" stop-color="#7ebaff" stop-opacity="0.8" />
+    </linearGradient>
+    <linearGradient id="glow-area" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9ceeab" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#9ceeab" stop-opacity="0.0" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1f2c3b" stroke-width="0.75" stroke-opacity="0.6"/>
+    </pattern>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="320" rx="16" fill="url(#bg-grad)" stroke="#293443" stroke-width="2"/>
+  <rect width="1200" height="320" rx="16" fill="url(#grid)"/>
+
+  <!-- Glowing background circles -->
+  <circle cx="200" cy="160" r="180" fill="#9ceeab" opacity="0.05" filter="url(#glow)"/>
+  <circle cx="950" cy="140" r="220" fill="#7ebaff" opacity="0.06" filter="url(#glow)"/>
+
+  <!-- Left: Stylized Options Payoff Curve -->
+  <g transform="translate(60, 40)">
+    <!-- Zero axis -->
+    <line x1="0" y1="140" x2="480" y2="140" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+    <text x="490" y="144" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">$0 Breakeven</text>
+
+    <!-- Shaded Profit Area -->
+    <polygon points="120,140 240,60 460,60 460,140" fill="url(#glow-area)"/>
+
+    <!-- Payoff Curve (Bull Put Spread / Defined Risk) -->
+    <polyline points="0,200 120,200 240,60 460,60" fill="none" stroke="url(#mint-grad)" stroke-width="4" filter="url(#glow)"/>
+
+    <!-- Strike points -->
+    <circle cx="120" cy="200" r="6" fill="#ffada3" stroke="#121a24" stroke-width="2"/>
+    <text x="120" y="225" text-anchor="middle" fill="#ffada3" font-family="monospace" font-size="12">Long Strike ($90)</text>
+
+    <circle cx="240" cy="60" r="6" fill="#ffd089" stroke="#121a24" stroke-width="2"/>
+    <text x="240" y="45" text-anchor="middle" fill="#ffd089" font-family="monospace" font-size="12">Short Strike ($95)</text>
+
+    <!-- Breakeven point -->
+    <circle cx="180" cy="140" r="5" fill="#7ebaff" stroke="#121a24" stroke-width="2"/>
+    <text x="180" y="130" text-anchor="middle" fill="#7ebaff" font-family="monospace" font-size="12" font-weight="700">B/E $93.50</text>
+
+    <text x="460" y="50" text-anchor="end" fill="#9ceeab" font-family="system-ui, sans-serif" font-size="13" font-weight="700">+MAX PROFIT (CREDIT)</text>
+    <text x="10" y="190" fill="#ffada3" font-family="system-ui, sans-serif" font-size="13" font-weight="700">-MAX RISK (CAPPED)</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="620" y1="40" x2="620" y2="280" stroke="#334155" stroke-width="1.5" stroke-dasharray="6"/>
+
+  <!-- Right: Title &amp; System Metrics -->
+  <g transform="translate(670, 70)">
+    <rect x="0" y="0" width="160" height="26" rx="13" fill="#14281e" stroke="#2e5940"/>
+    <text x="80" y="17" text-anchor="middle" fill="#9ceeab" font-family="system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing="1">DEFINED-RISK LAB</text>
+
+    <text x="0" y="65" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+      Options Master Lab
+    </text>
+    <text x="0" y="95" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="15">
+      Quantitative Foundations, Greeks &amp; Defined-Risk Execution
+    </text>
+
+    <!-- Metrics row -->
+    <g transform="translate(0, 125)">
+      <rect x="0" y="0" width="145" height="50" rx="8" fill="#121d28" stroke="#334155"/>
+      <text x="14" y="22" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10" font-weight="700">ACCOUNT MANDATE</text>
+      <text x="14" y="41" fill="#9ceeab" font-family="monospace" font-size="15" font-weight="700">$10,000 NZD</text>
+
+      <rect x="160" y="0" width="145" height="50" rx="8" fill="#121d28" stroke="#334155"/>
+      <text x="174" y="22" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10" font-weight="700">RISK CEILING</text>
+      <text x="174" y="41" fill="#7ebaff" font-family="monospace" font-size="15" font-weight="700">≤ 2.0% PER TRADE</text>
+
+      <rect x="320" y="0" width="145" height="50" rx="8" fill="#121d28" stroke="#334155"/>
+      <text x="334" y="22" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10" font-weight="700">STRATEGY FOCUS</text>
+      <text x="334" y="41" fill="#ffd089" font-family="monospace" font-size="14" font-weight="700">CAPPED SPREADS</text>
+    </g>
+  </g>
+</svg>
+    </div>
+
+    <div class="eyebrow">Phase 1 · Module 1.1</div>
+    <h1>Option Rights, Obligations &amp; Contract Anatomy</h1>
+
+    <div class="card">
+      <h2>1. The Real-World Anchor: Right vs. Obligation</h2>
+      <p>At its absolute foundation, an <strong>options contract</strong> is a binding legal covenant between two parties. However, unlike purchasing shares of stock where you immediately exchange cash for equity ownership, options trade <em>time, leverage, and contingent rights</em>.</p>
+      
+      <div class="callout">
+        <strong>🏡 The Real Estate Option Analogy:</strong><br>
+        Imagine you find a parcel of land currently valued at $250,000. You suspect the local council might approve commercial rezoning in 3 months that could boost its market value to $400,000, but you do not want to risk $250,000 in cash today. You approach the landowner and pay a <strong>non-refundable $5,000 option fee</strong> for the <em>exclusive right</em> to buy the land for $250,000 at any time over the next 90 days.
+        <ul style="margin-top: 8px; margin-bottom: 0;">
+          <li><strong>Scenario A (Rezoning Approved):</strong> The land value spikes to $400,000. You exercise your right, purchase the land for the pre-agreed $250,000, and immediately book a <strong>$145,000 net profit</strong> ($400,000 value - $250,000 purchase - $5,000 fee).</li>
+          <li><strong>Scenario B (Rezoning Rejected / Toxic Soil Found):</strong> The land value collapses to $100,000. You simply walk away. You forfeit your $5,000 fee, but you are <em>never forced</em> to buy the land. Your downside was strictly capped upfront.</li>
+          <li><strong>The Landowner (The Option Seller):</strong> Keeps the $5,000 cash in hand immediately on day one. However, they take on the <em>obligation</em> to sell at $250,000 if you choose to exercise, forfeiting any extra upside above that price.</li>
+        </ul>
+      </div>
+
+      <p>In financial markets, options on stocks and ETFs operate on this exact standardized principle, centrally cleared by the Options Clearing Corporation (OCC).</p>
+    </div>
+
+    <div class="card">
+      <h2>2. The 4 Fundamental Positions Matrix</h2>
+      <p>Every single advanced options strategy—from credit spreads and iron condors to calendar spreads—is simply a combination of these four foundational building blocks:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Type</th>
+              <th>Contractual Role</th>
+              <th>Directional Bias</th>
+              <th>Max Profit</th>
+              <th>Max Loss</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--mint)">Long Call</strong> 🟢</td>
+              <td><span class="tag tag-mint">Buyer</span></td>
+              <td>Holds the <strong>RIGHT</strong> to BUY 100 shares at Strike Price</td>
+              <td>Bullish ↗️</td>
+              <td>Unlimited</td>
+              <td>Premium Paid</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--loss)">Short Call</strong> 🔴</td>
+              <td><span class="tag tag-loss">Seller</span></td>
+              <td>Takes the <strong>OBLIGATION</strong> to SELL 100 shares if assigned</td>
+              <td>Bearish / Neutral ↘️</td>
+              <td>Premium Collected</td>
+              <td>Unlimited (Naked) / Capped (Spread)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--mint)">Long Put</strong> 🟢</td>
+              <td><span class="tag tag-mint">Buyer</span></td>
+              <td>Holds the <strong>RIGHT</strong> to SELL 100 shares at Strike Price</td>
+              <td>Bearish ↘️</td>
+              <td>(Strike - Premium) × 100</td>
+              <td>Premium Paid</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--loss)">Short Put</strong> 🔴</td>
+              <td><span class="tag tag-loss">Seller</span></td>
+              <td>Takes the <strong>OBLIGATION</strong> to BUY 100 shares if assigned</td>
+              <td>Bullish / Neutral ↗️</td>
+              <td>Premium Collected</td>
+              <td>(Strike - Premium) × 100</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ The Defined-Risk Imperative:</strong> Notice that selling uncovered ("naked") Short Calls carries theoretically unlimited loss if a stock spikes on an acquisition or breakthrough. In our <strong>$10,000 NZD defined-risk framework</strong>, we never sell naked options. Every short option is backed either by cash (Cash-Secured Put), stock (Covered Call), or a protective long wing (Vertical Spread).
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Contract Anatomy &amp; The Multiplier Rule</h2>
+      <p>A standard US equity or ETF option contains 5 immutable specifications. When viewing a quote ticket, you are reading a standardized legal covenant:</p>
+
+      <div class="visual-card">
+        <div class="visual-title">🏷️ Standard Option Ticket Anatomy</div>
+        <svg viewBox="0 0 740 220" role="img" aria-label="Option Contract Anatomy Diagram">
+          <rect x="10" y="10" width="720" height="200" rx="12" fill="#090e14" stroke="#293443" stroke-width="2"/>
+          <rect x="25" y="25" width="690" height="40" rx="6" fill="#14202d"/>
+          <text x="40" y="50" fill="#7ebaff" font-family="monospace" font-size="15" font-weight="700">OCC STANDARDIZED EQUITY SPECIFICATION</text>
+          <text x="560" y="50" fill="#9ceeab" font-family="monospace" font-size="14">MULTI: 100 SHARES</text>
+
+          <!-- Component Boxes -->
+          <g transform="translate(30, 85)">
+            <rect x="0" y="0" width="115" height="60" rx="8" fill="#121b25" stroke="#334155"/>
+            <text x="57" y="24" text-anchor="middle" fill="#94a3b8" font-size="11">UNDERLYING</text>
+            <text x="57" y="48" text-anchor="middle" fill="#f8fafc" font-size="20" font-weight="700">AAPL</text>
+          </g>
+
+          <g transform="translate(160, 85)">
+            <rect x="0" y="0" width="135" height="60" rx="8" fill="#121b25" stroke="#334155"/>
+            <text x="67" y="24" text-anchor="middle" fill="#94a3b8" font-size="11">EXPIRATION</text>
+            <text x="67" y="48" text-anchor="middle" fill="#ffd089" font-size="18" font-weight="700">21 NOV 25</text>
+          </g>
+
+          <g transform="translate(310, 85)">
+            <rect x="0" y="0" width="120" height="60" rx="8" fill="#121b25" stroke="#334155"/>
+            <text x="60" y="24" text-anchor="middle" fill="#94a3b8" font-size="11">STRIKE</text>
+            <text x="60" y="48" text-anchor="middle" fill="#9ceeab" font-size="20" font-weight="700">$230.00</text>
+          </g>
+
+          <g transform="translate(445, 85)">
+            <rect x="0" y="0" width="105" height="60" rx="8" fill="#121b25" stroke="#334155"/>
+            <text x="52" y="24" text-anchor="middle" fill="#94a3b8" font-size="11">TYPE</text>
+            <text x="52" y="48" text-anchor="middle" fill="#7ebaff" font-size="20" font-weight="700">CALL</text>
+          </g>
+
+          <g transform="translate(565, 85)">
+            <rect x="0" y="0" width="150" height="60" rx="8" fill="#1b2e24" stroke="#2e4d3b"/>
+            <text x="75" y="24" text-anchor="middle" fill="#9ceeab" font-size="11">QUOTED PREMIUM</text>
+            <text x="75" y="48" text-anchor="middle" fill="#9ceeab" font-size="20" font-weight="700">$4.50 / sh</text>
+          </g>
+
+          <!-- Cash translation banner -->
+          <rect x="25" y="160" width="690" height="35" rx="6" fill="#101820" stroke="#334155"/>
+          <text x="40" y="183" fill="#cbd5e1" font-size="13">Actual Capital Required for 1 Contract:</text>
+          <text x="310" y="183" fill="#f8fafc" font-weight="700" font-size="14">$4.50 × 100 multiplier = $450.00 USD (~$750 NZD at 0.60 FX)</text>
+          <circle cx="680" cy="177" r="6" fill="#9ceeab"/>
+        </svg>
+        <div class="visual-caption">Crucial Rule: Options are <em>quoted</em> per-share, but <em>transacted</em> per 100-share contract. Forgetting the 100x multiplier is the #1 reason beginners over-leverage their accounts.</div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="eyebrow">Quoted Price</div>
+          <div class="stat-val">$2.50</div>
+          <div class="small muted">Per share quoted on screen</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Contract Multiplier</div>
+          <div class="stat-val">× 100</div>
+          <div class="small muted">Standard equity multiplier</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Total Cash Outlay</div>
+          <div class="stat-val positive">$250 USD</div>
+          <div class="small muted">~$417 NZD debited from cash (at 0.60 FX)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 1.1</h2>
+      <div class="question">
+        <strong>Question:</strong> You sell to open 1 contract of an XYZ $50 Short Put and receive a quoted premium of $1.80. What is your legal obligation and your immediate cash impact?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Remember the 100x contract multiplier! A quote of $1.80 represents $180 total cash, not $1.80.')">
+        A) You receive $1.80 cash and hold the right to sell 100 shares at $50.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Selling an option generates an upfront cash credit ($1.80 × 100 = $180 USD), and a short put obligates you to purchase 100 shares at the $50 strike price if assigned.')">
+        B) You receive $180.00 USD cash immediately and take on the obligation to buy 100 shares at $50 if assigned.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Put options deal with the obligation to buy shares when sold, not sell shares. Short calls obligate you to sell.')">
+        C) You receive $180.00 USD cash and take on the obligation to sell 100 shares at $50 if assigned.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m1_2: `
+    <div class="eyebrow">Phase 1 · Module 1.2</div>
+    <h1>Option Chains, Bid-Ask Spreads &amp; Moneyness</h1>
+
+    <div class="card">
+      <h2>1. The Option Chain Matrix: Decoding the Display</h2>
+      <p>When you open your trading platform, you are presented with the <strong>Option Chain</strong>. The standard chain is laid out symmetrically with the underlying strike prices running right down the spine:</p>
+      
+      <ul>
+        <li><strong>Left Side (Calls):</strong> All available Call options for that expiration date.</li>
+        <li><strong>Center Spine (Strike Prices):</strong> The predetermined price targets ($K$) arranged in ascending order.</li>
+        <li><strong>Right Side (Puts):</strong> All available Put options for that expiration date.</li>
+      </ul>
+
+      <p>Each row displays vital market metrics that every professional checks before placing an order:</p>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Definition</th><th>Small-Account Discipline Target</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Bid</strong></td>
+              <td>The highest price buyers are currently offering to pay.</td>
+              <td>Where you get filled if you sell with a market order (avoid doing this!).</td>
+            </tr>
+            <tr>
+              <td><strong>Ask</strong></td>
+              <td>The lowest price sellers are currently willing to accept.</td>
+              <td>Where you get filled if you buy with a market order.</td>
+            </tr>
+            <tr>
+              <td><strong>Midpoint</strong></td>
+              <td>The arithmetic midpoint: <code>(Bid + Ask) / 2</code>.</td>
+              <td><strong>Always enter Limit Orders at the Midpoint</strong> to minimize execution drag!</td>
+            </tr>
+            <tr>
+              <td><strong>Open Interest (OI)</strong></td>
+              <td>Total number of outstanding, active contracts in existence.</td>
+              <td>Screen for <strong>OI &ge; 500</strong> (ensures active liquidity when entering and exiting).</td>
+            </tr>
+            <tr>
+              <td><strong>Volume</strong></td>
+              <td>Total number of contracts traded during today's session only.</td>
+              <td>Indicates active current-session trading participation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <strong>💡 The Slippage Math on a $10k NZD Account:</strong><br>
+        Suppose an option is quoted with a Bid of $1.00 and an Ask of $1.40 (midpoint $1.20). The spread is $0.40.<br>
+        If quotes remain unchanged and you execute at market on both entry and exit (buying at the ask for $1.40 and later selling at the bid for $1.00), you lose <strong>$40.00 USD per contract</strong> ($20 on entry and $20 on exit relative to the midpoint).<br>
+        At an exchange rate of 0.60 USD/NZD, $40 USD equals <strong>$66.67 NZD</strong>, or <strong>0.67% of your total $10,000 account equity</strong> forfeited to execution friction alone! Always place <em>Limit Orders at the Midpoint ($1.20)</em> and walk the order by single cents if necessary.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. The Three States of Moneyness</h2>
+      <p><strong>Moneyness</strong> describes whether an option has immediate, tangible cash value based on where the underlying stock is currently trading:</p>
+
+      <div class="grid-3">
+        <div class="stat-box" style="text-align: left;">
+          <div class="eyebrow" style="color:var(--mint)">In-The-Money (ITM) 🟢</div>
+          <p style="font-size:13px; margin: 8px 0;">Possesses genuine <strong>intrinsic value</strong> right now. If exercised immediately, it yields positive intrinsic cash value.</p>
+          <ul style="font-size:12px; padding-left:16px; margin:0;" class="muted">
+            <li><strong>Call:</strong> Stock &gt; Strike (S &gt; K)</li>
+            <li><strong>Put:</strong> Stock &lt; Strike (S &lt; K)</li>
+          </ul>
+        </div>
+
+        <div class="stat-box" style="text-align: left;">
+          <div class="eyebrow" style="color:var(--amber)">At-The-Money (ATM) 🟡</div>
+          <p style="font-size:13px; margin: 8px 0;">Stock price equals strike price (S = K). Contains <strong>zero intrinsic value</strong>, but contains maximum <strong>extrinsic (time) value</strong>.</p>
+          <ul style="font-size:12px; padding-left:16px; margin:0;" class="muted">
+            <li>Highest gamma sensitivity</li>
+            <li>Fastest rate of nominal time decay</li>
+          </ul>
+        </div>
+
+        <div class="stat-box" style="text-align: left;">
+          <div class="eyebrow" style="color:var(--loss)">Out-Of-The-Money (OTM) 🔴</div>
+          <p style="font-size:13px; margin: 8px 0;">Has <strong>zero intrinsic value</strong>. Its price is 100% extrinsic time/volatility value. If it expired right now, it would expire worthless ($0.00).</p>
+          <ul style="font-size:12px; padding-left:16px; margin:0;" class="muted">
+            <li><strong>Call:</strong> Stock &lt; Strike (S &lt; K)</li>
+            <li><strong>Put:</strong> Stock &gt; Strike (S &gt; K)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. The Premium Formula: Intrinsic + Extrinsic Breakdown</h2>
+      <p>Every option premium is composed of two distinct components:</p>
+      
+      <div class="formula-banner">
+        Total Option Premium = Intrinsic Value + Extrinsic Value
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-title">🌡️ Moneyness &amp; Premium Breakdown (Stock at $105)</div>
+        <svg viewBox="0 0 740 280" role="img" aria-label="Moneyness and Intrinsic vs Extrinsic Breakdown">
+          <rect x="10" y="10" width="720" height="260" rx="10" fill="#090e14" stroke="#293443"/>
+          
+          <text x="35" y="38" fill="#7ebaff" font-size="14" font-weight="700">STRIKE PRICE SCALE vs UNDERLYING STOCK ($105.00)</text>
+
+          <!-- Zone Dividers -->
+          <rect x="35" y="55" width="310" height="32" rx="4" fill="#12251a"/>
+          <text x="190" y="76" text-anchor="middle" fill="#9ceeab" font-size="12" font-weight="600">CALL ITM / PUT OTM ($90 – $100)</text>
+
+          <rect x="350" y="55" width="80" height="32" rx="4" fill="#302613" stroke="#ffd089"/>
+          <text x="390" y="76" text-anchor="middle" fill="#ffd089" font-size="12" font-weight="700">ATM ($105)</text>
+
+          <rect x="435" y="55" width="270" height="32" rx="4" fill="#2d1717"/>
+          <text x="570" y="76" text-anchor="middle" fill="#ffada3" font-size="12" font-weight="600">CALL OTM / PUT ITM ($110 – $120)</text>
+
+          <!-- Stacked Bar -->
+          <text x="35" y="130" fill="#f8fafc" font-size="14" font-weight="700">Decomposing a $100 Call Trading at $7.50 (Stock = $105):</text>
+          
+          <g transform="translate(35, 145)">
+            <rect x="0" y="0" width="446" height="50" rx="6" fill="#1b3d2b" stroke="#2e5940" stroke-width="2"/>
+            <text x="223" y="26" text-anchor="middle" fill="#9ceeab" font-size="16" font-weight="700">$5.00 Intrinsic Value</text>
+            <text x="223" y="42" text-anchor="middle" fill="#cbd5e1" font-size="11">Tangible Cash Component: max(0, $105 Stock - $100 Strike)</text>
+
+            <rect x="452" y="0" width="218" height="50" rx="6" fill="#1b2a3d" stroke="#2a4568" stroke-width="2"/>
+            <text x="561" y="26" text-anchor="middle" fill="#7ebaff" font-size="16" font-weight="700">$2.50 Extrinsic Value</text>
+            <text x="561" y="42" text-anchor="middle" fill="#cbd5e1" font-size="11">Time Value (Theta) + Volatility (Vega)</text>
+          </g>
+
+          <g transform="translate(35, 215)">
+            <text x="0" y="16" fill="#ffd089" font-size="13">⏳ Expiration Reality:</text>
+            <text x="140" y="16" fill="#cbd5e1" font-size="13">At expiration, Extrinsic Value decays to exactly $0.00. Only Intrinsic value survives!</text>
+            <text x="0" y="38" fill="#9ceeab" font-size="13">🎯 Option Seller Edge:</text>
+            <text x="145" y="38" fill="#cbd5e1" font-size="12">Selling OTM credit spreads captures 100% extrinsic decay in your favor.</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="callout">
+        <strong>🧮 Worked Example:</strong>
+        <ul>
+          <li><strong>Current Stock Price (S):</strong> $105.00</li>
+          <li><strong>Option:</strong> $100 Strike Call quoted at $7.50</li>
+          <li><strong>Intrinsic Value Formula:</strong> Call Intrinsic = max(0, S - K) = max(0, $105 - $100) = <strong>$5.00</strong></li>
+          <li><strong>Extrinsic Value Formula:</strong> Extrinsic = Total Premium - Intrinsic = $7.50 - $5.00 = <strong>$2.50</strong></li>
+        </ul>
+        If the stock stays at $105.00 at expiration, the call finishes with $5.00 intrinsic value. The buyer loses the $2.50 paid for extrinsic value, while the option seller retains that extrinsic decay as profit.
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 1.2</h2>
+      <div class="question">
+        <strong>Question:</strong> Stock XYZ is trading at $42.00. A $40.00 Strike Call is currently quoted at $3.50. What is the intrinsic and extrinsic value of this call option?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Check the math: The stock is at $42, and the strike is $40. The intrinsic value is $42 - $40 = $2.00.')">
+        A) Intrinsic: $0.00, Extrinsic: $3.50
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Intrinsic = max(0, $42 - $40) = $2.00. Extrinsic = Total Premium ($3.50) - Intrinsic ($2.00) = $1.50 per share.')">
+        B) Intrinsic: $2.00, Extrinsic: $1.50
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'A call is in-the-money when the stock price exceeds the strike price.')">
+        C) Intrinsic: $3.50, Extrinsic: $0.00
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m1_3: `
+    <div class="eyebrow">Phase 1 · Module 1.3</div>
+    <h1>P&amp;L Payoff Curves &amp; Breakeven Mechanics</h1>
+
+    <div class="card">
+      <h2>1. The Visual Language of Options</h2>
+      <p>When you trade shares of stock, your profit or loss is strictly linear: if the stock rises $5, you make $5; if it drops $5, you lose $5. A stock's P&amp;L chart is an unbroken diagonal line.</p>
+      
+      <p>Options, however, introduce <strong>non-linear payoffs ("hockey stick" curves)</strong> because the strike price acts as an absolute structural inflection point (the "kink"):</p>
+      <ul>
+        <li><strong>Horizontal X-Axis:</strong> Underlying Stock Price at Expiration (S).</li>
+        <li><strong>Vertical Y-Axis:</strong> Dollar Profit (+) or Loss (-) per contract.</li>
+        <li><strong>The Zero Line:</strong> The breakeven line where Net P&amp;L = $0.00.</li>
+        <li><strong>The Strike Kink (K):</strong> The exact coordinate where rights are triggered or obligations kick in.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. Visualizing the 4 Foundational Payoff Profiles</h2>
+      <p>All four profiles below assume a standard <strong>$100 Strike</strong> and a <strong>$5.00 Quoted Premium</strong> ($500 cash value):</p>
+
+      <div class="visual-card">
+        <div class="visual-title">📈 The 4 Core Payoff Curves (Strike: $100, Premium: $5.00)</div>
+        <svg viewBox="0 0 740 440" role="img" aria-label="4 Option Payoff Curves">
+          <rect x="10" y="10" width="720" height="420" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Top-Left: Long Call -->
+          <g transform="translate(25, 25)">
+            <rect x="0" y="0" width="335" height="185" rx="6" fill="#121a24" stroke="#334155"/>
+            <text x="15" y="24" fill="#9ceeab" font-size="14" font-weight="700">1. Long Call 🟢 (Buyer)</text>
+            <text x="15" y="40" fill="#cbd5e1" font-size="11">Max Loss: $500 | Breakeven: $105 | Max Gain: Unlimited</text>
+            <line x1="30" y1="120" x2="310" y2="120" stroke="#344354" stroke-width="1.5"/>
+            <text x="315" y="124" fill="#94a3b8" font-size="10">Stock</text>
+            <line x1="30" y1="40" x2="30" y2="165" stroke="#344354" stroke-width="1.5"/>
+            <polyline points="30,145 150,145 280,45" fill="none" stroke="#9ceeab" stroke-width="2.5"/>
+            <circle cx="150" cy="145" r="4" fill="#ffd089"/>
+            <text x="145" y="160" fill="#ffd089" font-size="10">Strike $100</text>
+            <circle cx="182.5" cy="120" r="4" fill="#7ebaff"/>
+            <text x="175" y="112" fill="#7ebaff" font-size="10">B/E $105</text>
+          </g>
+
+          <!-- Top-Right: Short Call -->
+          <g transform="translate(380, 25)">
+            <rect x="0" y="0" width="335" height="185" rx="6" fill="#121a24" stroke="#334155"/>
+            <text x="15" y="24" fill="#ffada3" font-size="14" font-weight="700">2. Short Call 🔴 (Seller)</text>
+            <text x="15" y="40" fill="#cbd5e1" font-size="11">Max Gain: +$500 | Breakeven: $105 | Max Loss: UNLIMITED</text>
+            <line x1="30" y1="95" x2="310" y2="95" stroke="#344354" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="30" y2="165" stroke="#344354" stroke-width="1.5"/>
+            <polyline points="30,70 150,70 280,170" fill="none" stroke="#ffada3" stroke-width="2.5"/>
+            <circle cx="150" cy="70" r="4" fill="#ffd089"/>
+            <text x="145" y="60" fill="#ffd089" font-size="10">Strike $100</text>
+            <circle cx="182.5" cy="95" r="4" fill="#7ebaff"/>
+            <text x="175" y="110" fill="#7ebaff" font-size="10">B/E $105</text>
+          </g>
+
+          <!-- Bottom-Left: Long Put -->
+          <g transform="translate(25, 230)">
+            <rect x="0" y="0" width="335" height="185" rx="6" fill="#121a24" stroke="#334155"/>
+            <text x="15" y="24" fill="#9ceeab" font-size="14" font-weight="700">3. Long Put 🟢 (Buyer)</text>
+            <text x="15" y="40" fill="#cbd5e1" font-size="11">Max Loss: $500 | Breakeven: $95 | Max Gain: $9,500</text>
+            <line x1="30" y1="120" x2="310" y2="120" stroke="#344354" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="30" y2="165" stroke="#344354" stroke-width="1.5"/>
+            <polyline points="50,45 190,145 310,145" fill="none" stroke="#9ceeab" stroke-width="2.5"/>
+            <circle cx="190" cy="145" r="4" fill="#ffd089"/>
+            <text x="180" y="160" fill="#ffd089" font-size="10">Strike $100</text>
+            <circle cx="155" cy="120" r="4" fill="#7ebaff"/>
+            <text x="135" y="112" fill="#7ebaff" font-size="10">B/E $95</text>
+          </g>
+
+          <!-- Bottom-Right: Short Put (Cash Secured) -->
+          <g transform="translate(380, 230)">
+            <rect x="0" y="0" width="335" height="185" rx="6" fill="#121a24" stroke="#334155"/>
+            <text x="15" y="24" fill="#ffd089" font-size="14" font-weight="700">4. Cash-Secured Short Put 🟡 (Seller)</text>
+            <text x="15" y="40" fill="#cbd5e1" font-size="11">Max Gain: +$500 | Breakeven: $95 | Max Loss: $9,500</text>
+            <line x1="30" y1="95" x2="310" y2="95" stroke="#344354" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="30" y2="165" stroke="#344354" stroke-width="1.5"/>
+            <polyline points="50,170 190,70 310,70" fill="none" stroke="#ffd089" stroke-width="2.5"/>
+            <circle cx="190" cy="70" r="4" fill="#ffd089"/>
+            <text x="180" y="60" fill="#ffd089" font-size="10">Strike $100</text>
+            <circle cx="155" cy="95" r="4" fill="#7ebaff"/>
+            <text x="135" y="112" fill="#7ebaff" font-size="10">B/E $95</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. The Defined-Risk Transformation (Why Spreads Win)</h2>
+      <p>Look carefully at Curve #4 (Cash-Secured Put). If you sell an uncovered or cash-secured $100 Put, your maximum profit is strictly limited to the $500 premium collected. However, if the underlying company suffers a severe drawdown, you must purchase the stock at $100, absorbing up to <strong>$9,500 in losses</strong> on a single contract if it collapses to zero!</p>
+      
+      <p>In a $10,000 NZD account, one catastrophic tail-risk event can wipe out multiple years of profits. <strong>How do we resolve this?</strong></p>
+      
+      <div class="callout">
+        <strong>🛡️ The Vertical Credit Spread Architecture:</strong><br>
+        Instead of selling a standalone short put, we simultaneously <strong>buy an Out-of-the-Money protective put</strong> further down (for instance, selling the $95 Put and buying the $90 Put for a net credit of $1.50):
+        <ul style="margin-top:8px;">
+          <li><strong>Net Credit Collected:</strong> $1.50 per share ($150 USD max gain)</li>
+          <li><strong>Strike Width:</strong> $95 - $90 = $5.00</li>
+          <li><strong>Max Contractual Loss:</strong> ($5.00 Strike Width - $1.50 Credit) × 100 = <strong>$350 USD</strong></li>
+          <li><strong>Breakeven:</strong> Short Strike ($95) - Credit ($1.50) = <strong>$93.50</strong></li>
+        </ul>
+        The downside curve turns completely flat below $90! Even if the underlying stock drops to $0.00, your contractual loss remains strictly capped at $350 USD.
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ Account Sizing Context ($10,000 NZD):</strong> While a $5.00-wide spread ($350 max loss) illustrates the structural mechanics, on our $10,000 NZD account under our strict &le; 2% risk budget ($120 USD / $200 NZD), a $350 loss would represent ~5.8% risk! Therefore, for our account size, we trade <strong>$1.00 to $1.50 wide spreads</strong> (e.g. collecting $0.35 on a $1.00 wide spread = $65 USD max loss, which fits comfortably within our $120 budget).
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 1.3</h2>
+      <div class="question">
+        <strong>Question:</strong> You sell a Cash-Secured Put on stock ABC with a strike price of $35.00 and collect a premium of $2.20. What is your expiration breakeven stock price?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Adding premium to strike gives call breakeven ($37.20). Puts have breakevens below the strike.')">
+        A) $37.20
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Correct! Put Breakeven = Strike ($35.00) - Premium ($2.20) = $32.80. If ABC finishes anywhere above $32.80 at expiration, the trade generates a profit.')">
+        B) $32.80
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Strike price alone does not reflect the premium collected.')">
+        C) $35.00
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m1_4: `
+    <div class="eyebrow">Phase 1 · Module 1.4</div>
+    <h1>Expectancy Math &amp; Debunking Options Myths</h1>
+
+    <div class="card">
+      <h2>1. The "90% Win Rate" Trap</h2>
+      <p>Online options marketing frequently advertises: <em>"Earn a guaranteed 90% win rate selling options!"</em></p>
+      
+      <p>This is a major psychological pitfall for beginners. Selling deep Out-of-the-Money options does produce high nominal win rates, but <strong>win rate in isolation is meaningless</strong> without measuring the severity of your losses.</p>
+
+      <div class="callout-warn">
+        <strong>🦃 The Turkey Analogy:</strong><br>
+        A turkey is fed every morning for 1,000 days. Each feeding statistically reinforces that the farmer is benevolent. Then comes Thanksgiving. A 99.9% historical win rate did not protect the turkey from tail risk. Options sellers who fail to manage loss severity face the exact same distribution.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. The Mathematical Expectancy Equation</h2>
+      <p>Professional options traders evaluate strategies using <strong>Expected Value (EV) per trade</strong>:</p>
+
+      <div class="formula-banner">
+        EV per Trade = (Win Rate × Avg Realized Win) - (Loss Rate × Avg Realized Loss) - Trading Costs
+      </div>
+
+      <p>Let's compare two traders over an illustrative 100-trade sequence:</p>
+
+      <div class="grid-2">
+        <div class="stat-box" style="text-align:left; border-color:#5a2e2e;">
+          <div class="eyebrow" style="color:var(--loss)">Trader A (High Win Rate, Unmanaged Tail Risk)</div>
+          <ul style="font-size:13px; margin: 8px 0; padding-left:18px;">
+            <li>Win Rate: <strong>90%</strong> (90 wins, 10 losses)</li>
+            <li>Average Win: <strong>+$50 USD</strong></li>
+            <li>Average Loss: <strong>-$600 USD</strong> (Unhedged tail risk)</li>
+            <li>Trading Costs: <strong>$2 per trade</strong></li>
+          </ul>
+          <div class="callout-warn" style="margin:8px 0; font-size:12px;">
+            <strong>Math:</strong> (0.90 × $50) - (0.10 × $600) - $2<br>
+            = $45 - $60 - $2 = <strong style="color:var(--loss)">-$17.00 per trade</strong>
+          </div>
+          <p class="negative" style="font-size:13px; font-weight:700;">Result over 100 trades: -$1,700 net loss! Negative expectancy despite 90% wins.</p>
+        </div>
+
+        <div class="stat-box" style="text-align:left; border-color:#2e4d3b;">
+          <div class="eyebrow" style="color:var(--mint)">Trader B (Defined-Risk Disciplined Spread Trader)</div>
+          <ul style="font-size:13px; margin: 8px 0; padding-left:18px;">
+            <li>Win Rate: <strong>68%</strong> (68 wins, 32 losses)</li>
+            <li>Average Win: <strong>+$110 USD</strong></li>
+            <li>Average Loss: <strong>-$160 USD</strong> (Strictly capped spread wing)</li>
+            <li>Trading Costs: <strong>$2 per trade</strong></li>
+          </ul>
+          <div class="callout" style="margin:8px 0; font-size:12px;">
+            <strong>Math:</strong> (0.68 × $110) - (0.32 × $160) - $2<br>
+            = $74.80 - $51.20 - $2 = <strong style="color:var(--mint)">+$21.60 per trade</strong>
+          </div>
+          <p class="positive" style="font-size:13px; font-weight:700;">Result over 100 trades: +$2,160 net profit! Positive mathematical edge.</p>
+        </div>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-title">📊 Illustrative 10-Trade Realization Comparison</div>
+        <svg viewBox="0 0 740 220" role="img" aria-label="10 Trades Simulation Comparison">
+          <rect x="10" y="10" width="720" height="200" rx="10" fill="#090e14" stroke="#293443"/>
+          
+          <!-- Trader A -->
+          <text x="30" y="35" fill="#ffada3" font-size="13" font-weight="700">Trader A Sample: 9 Wins (+50), 1 Loss (-600), 10 fees @ $2 → Net: -$170 USD</text>
+          <g transform="translate(30, 45)">
+            <rect x="0" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="22" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="55" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="77" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="110" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="132" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="165" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="187" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="220" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="242" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="275" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="297" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="330" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="352" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="385" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="407" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+            <rect x="440" y="20" width="45" height="20" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="462" y="34" text-anchor="middle" fill="#9ceeab" font-size="11">+50</text>
+
+            <rect x="495" y="5" width="180" height="40" rx="4" fill="#3a1c1c" stroke="#632e2e"/>
+            <text x="585" y="30" text-anchor="middle" fill="#ffada3" font-size="13" font-weight="700">💥 Single Loss: -$600</text>
+          </g>
+
+          <!-- Trader B -->
+          <text x="30" y="135" fill="#9ceeab" font-size="13" font-weight="700">Trader B Sample: 7 Wins (+110), 3 Capped Losses (-160), 10 fees @ $2 → Net: +$270 USD</text>
+          <g transform="translate(30, 145)">
+            <rect x="0" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="27" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+            <rect x="65" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="92" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+            <rect x="130" y="10" width="65" height="28" rx="4" fill="#3a1c1c" stroke="#632e2e"/>
+            <text x="162" y="28" text-anchor="middle" fill="#ffada3" font-size="11">-160</text>
+            <rect x="205" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="232" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+            <rect x="270" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="297" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+            <rect x="335" y="10" width="65" height="28" rx="4" fill="#3a1c1c" stroke="#632e2e"/>
+            <text x="367" y="28" text-anchor="middle" fill="#ffada3" font-size="11">-160</text>
+            <rect x="410" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="437" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+            <rect x="475" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="502" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+            <rect x="540" y="10" width="65" height="28" rx="4" fill="#3a1c1c" stroke="#632e2e"/>
+            <text x="572" y="28" text-anchor="middle" fill="#ffada3" font-size="11">-160</text>
+            <rect x="615" y="10" width="55" height="28" rx="4" fill="#183323" stroke="#2e4d3b"/>
+            <text x="642" y="28" text-anchor="middle" fill="#9ceeab" font-size="11">+110</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. The Defined-Risk Advantage: "Three Ways to Win"</h2>
+      <p>What gives defined-risk credit spreads an empirical edge? It is the structural advantage known as the <strong>Three Ways to Win</strong>:</p>
+      
+      <p>When you buy a directional stock or call option, the underlying asset <em>must move in your favor</em> fast enough to overcome fees and time decay. However, when you sell an Out-of-the-Money credit spread (e.g. a Bull Put Spread):</p>
+      <ol>
+        <li><strong>The stock rises:</strong> Full profit as options expire OTM.</li>
+        <li><strong>The stock moves sideways:</strong> Theta decay erodes extrinsic value; full profit.</li>
+        <li><strong>The stock drops moderately:</strong> As long as the stock remains above your breakeven at expiration, you still book a profit!</li>
+      </ol>
+      <p>This structural buffer creates a statistically resilient foundation when combined with disciplined sizing.</p>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 1.4</h2>
+      <div class="question">
+        <strong>Question:</strong> A trading strategy wins 80% of the time with an average win of $100. When it loses (20% of the time), it suffers an unhedged average loss of $500. Ignoring commissions, what is the strategy's expected return per trade?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Remember to calculate: (0.80 × $100) - (0.20 × $500).')">
+        A) +$80.00 profit per trade
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! EV = (0.80 × $100) - (0.20 × $500) = $80 - $100 = -$20.00 loss per trade. Despite winning 8 out of every 10 trades, this trader loses $20 on average every time they click execute!')">
+        B) -$20.00 loss per trade
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'The loss side ($100 expected loss) is larger than the win side ($80 expected win).')">
+        C) +$20.00 profit per trade
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m1_5: `
+    <div class="eyebrow">Phase 1 · Module 1.5</div>
+    <h1>Expiration Mechanics, Assignment &amp; Settlement Styles</h1>
+
+    <div class="card">
+      <h2>1. The 3 Lifecycles of an Options Trade</h2>
+      <p>Beginners often assume that every options contract must be held until final expiration. In professional trading, positions are actively managed across three primary pathways:</p>
+
+      <div class="grid-3">
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--mint)">1. Closed Early (BTC / STC) ✅</div>
+          <p style="font-size:13px; margin: 8px 0;"><strong>The Professional Standard.</strong> You buy-to-close a short option or sell-to-close a long option prior to expiration.</p>
+          <div class="small muted">Taking profits at 50% max credit eliminates late gamma risk and frees up buying power.</div>
+        </div>
+
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--blue)">2. Expire Worthless ($0.00) 🎯</div>
+          <p style="font-size:13px; margin: 8px 0;">The option finishes Out-of-the-Money relative to the strike at the 4:00 PM ET close on expiration day.</p>
+          <div class="small muted">The seller keeps 100% of the premium collected; the buyer's premium is fully lost.</div>
+        </div>
+
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--amber)">3. Exercise &amp; Assignment 📦</div>
+          <p style="font-size:13px; margin: 8px 0;">The option finishes In-The-Money (ITM). The long holder exercises, and a short seller is assigned.</p>
+          <div class="small muted">Underlying shares (or cash) change hands at the strike price.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. OCC Exercise-by-Exception &amp; Assignment Allocation</h2>
+      <p>The <strong>Options Clearing Corporation (OCC)</strong> serves as the central counterparty for all US exchange-traded options, guaranteeing contract performance.</p>
+
+      <div class="callout">
+        <strong>⚖️ OCC Rule 805 (Exercise-by-Exception):</strong><br>
+        Under OCC Rule 805, any equity or ETF option that expires <strong>In-The-Money by &ge; $0.01</strong> at the 4:00 PM ET close on its expiration day is <strong>automatically exercised</strong> by the OCC on behalf of long clearing members, unless contrary instructions ("Do Not Exercise" / DNE) are submitted before the cutoff (typically 5:30 PM ET).<br><br>
+        If you hold a short position in that contract, the OCC allocates assignment randomly among clearing member firms, who in turn assign short positions to clients using standard allocation methods (random or FIFO).
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Exercise Style vs. Settlement Method</h2>
+      <p>Option contracts possess two distinct structural attributes that should not be conflated:</p>
+
+      <div class="grid-2">
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--mint)">Exercise Style: Timing of Exercise</div>
+          <ul style="font-size:13px; margin:8px 0; padding-left:18px;">
+            <li><strong>American-Style:</strong> Can be exercised at <strong>any time</strong> on any business day up to and including expiration day. (Standard for US single stocks and ETFs like AAPL, SPY, QQQ).</li>
+            <li><strong>European-Style:</strong> Can <strong>ONLY</strong> be exercised on the final expiration date. (Standard for index options like SPX, NDX, RUT).</li>
+          </ul>
+        </div>
+
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--blue)">Settlement Method: How Contracts Settle</div>
+          <ul style="font-size:13px; margin:8px 0; padding-left:18px;">
+            <li><strong>Physical Settlement:</strong> Involves actual delivery of 100 shares of underlying stock per contract.</li>
+            <li><strong>Cash Settlement:</strong> Settled entirely via a cash debit or credit based on the settlement value (e.g. SPX cash index; or OEX which is American-style cash-settled). Always verify AM vs PM settlement rules!</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ Early Assignment &amp; Dividend Risk:</strong><br>
+        On American-style equity calls, early assignment most frequently occurs <strong>the day before the ex-dividend date</strong>. If an in-the-money call's remaining extrinsic value is less than the upcoming dividend, call holders often exercise early to capture the dividend.<br>
+        <em>Critical Spread Rule:</em> Assignment of your short call leg does <strong>not</strong> automatically exercise your long protective call! If assigned, your broker will require stock delivery, creating unexpected equity risk if unmanaged.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. The Reality of Pin Risk &amp; The Disciplined Exit Rule</h2>
+      <p>Imagine you hold a $100 Short Put on a stock trading at $100.20 at 3:55 PM on expiration day. While it appears OTM during market hours, after-hours news between 4:00 PM and 5:30 PM ET can cause the stock to drop to $99.80. The option holder can submit contrary exercise instructions, resulting in surprise weekend assignment!</p>
+
+      <div class="visual-card">
+        <div class="visual-title">🚦 Expiration &amp; Assignment Flowchart</div>
+        <svg viewBox="0 0 740 250" role="img" aria-label="Assignment Decision Flowchart">
+          <rect x="10" y="10" width="720" height="230" rx="10" fill="#090e14" stroke="#293443"/>
+          
+          <!-- Node 1 -->
+          <g transform="translate(35, 35)">
+            <rect x="0" y="0" width="180" height="60" rx="8" fill="#1b2e24" stroke="#2e4d3b" stroke-width="2"/>
+            <text x="90" y="26" text-anchor="middle" fill="#9ceeab" font-size="13" font-weight="700">14 – 21 DTE Window</text>
+            <text x="90" y="46" text-anchor="middle" fill="#cbd5e1" font-size="11">Hit 50% Profit Target?</text>
+          </g>
+
+          <line x1="215" y1="65" x2="275" y2="65" stroke="#9ceeab" stroke-width="2"/>
+          <text x="245" y="55" text-anchor="middle" fill="#9ceeab" font-size="11">YES</text>
+
+          <!-- Node 2 -->
+          <g transform="translate(275, 35)">
+            <rect x="0" y="0" width="190" height="60" rx="8" fill="#14281e" stroke="#2e5940"/>
+            <text x="95" y="26" text-anchor="middle" fill="#9ceeab" font-size="13" font-weight="700">Buy-to-Close Trade</text>
+            <text x="95" y="46" text-anchor="middle" fill="#cbd5e1" font-size="11">Zero Expiration / Pin Risk ✅</text>
+          </g>
+
+          <line x1="125" y1="95" x2="125" y2="135" stroke="#ffd089" stroke-width="2"/>
+          <text x="135" y="120" fill="#ffd089" font-size="11">NO</text>
+
+          <!-- Node 3 -->
+          <g transform="translate(35, 135)">
+            <rect x="0" y="0" width="180" height="75" rx="8" fill="#2d2212" stroke="#5c431e"/>
+            <text x="90" y="26" text-anchor="middle" fill="#ffd089" font-size="13" font-weight="700">Expiration Day</text>
+            <text x="90" y="46" text-anchor="middle" fill="#cbd5e1" font-size="11">4:00 PM ET Market Close</text>
+            <text x="90" y="62" text-anchor="middle" fill="#ffd089" font-size="10">Evaluate Settlement</text>
+          </g>
+
+          <line x1="215" y1="172" x2="275" y2="172" stroke="#7ebaff" stroke-width="2"/>
+          
+          <!-- Node 4 -->
+          <g transform="translate(275, 125)">
+            <rect x="0" y="0" width="200" height="42" rx="6" fill="#12251a" stroke="#2e4d3b"/>
+            <text x="100" y="26" text-anchor="middle" fill="#9ceeab" font-size="12" font-weight="600">OTM: Expires Worthless ($0)</text>
+
+            <rect x="0" y="55" width="200" height="42" rx="6" fill="#3a1c1c" stroke="#632e2e"/>
+            <text x="100" y="80" text-anchor="middle" fill="#ffada3" font-size="12" font-weight="600">ITM &ge; $0.01: Auto-Assigned ⚠️</text>
+          </g>
+
+          <!-- Warning callout box -->
+          <g transform="translate(500, 45)">
+            <rect x="0" y="0" width="210" height="150" rx="8" fill="#151d28" stroke="#334155"/>
+            <text x="15" y="28" fill="#ffd089" font-size="13" font-weight="700">⚠️ Pin Risk Alert</text>
+            <text x="15" y="50" fill="#cbd5e1" font-size="11">If stock is near strike,</text>
+            <text x="15" y="68" fill="#cbd5e1" font-size="11">after-hours moves until 5:30 PM ET</text>
+            <text x="15" y="86" fill="#cbd5e1" font-size="11">can trigger surprise assignment!</text>
+            <text x="15" y="115" fill="#9ceeab" font-size="12" font-weight="700">Golden Rule:</text>
+            <text x="15" y="133" fill="#9ceeab" font-size="11">Never hold into final expiration day.</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="callout-warn">
+        <strong>🛡️ The Disciplined Exit Rule for Small Accounts:</strong><br>
+        Do not hold short options into expiration day. To avoid tail-risk assignment or pin risk, close trades upon achieving <strong>50% of maximum profit</strong> or when reaching <strong>14–21 DTE</strong>.
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 1.5</h2>
+      <div class="question">
+        <strong>Question:</strong> You hold a Short Put with a $100 strike on a US stock. At 4:00 PM ET on expiration day, the stock closes at $99.95. What occurs under standard OCC rules?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Under OCC Rule 805, options ITM by $0.01 or more are subject to automatic exercise.')">
+        A) Nothing; since it missed $100 by only 5 cents, it expires worthless.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! The option is In-The-Money by $0.05 (&ge; $0.01), triggering OCC exercise-by-exception. You will be assigned to buy 100 shares at $100 ($10,000 USD gross transaction). This is why disciplined traders close before expiration!')">
+        B) It triggers automatic exercise under the $0.01 rule; you are assigned to purchase 100 shares at $100 per share.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Equity options on US stocks are American-style and physically settled, not cash-settled.')">
+        C) Your broker automatically settles the difference in cash without assigning shares.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+
+  // Phase 2
+  m2_1: `
+    <div class="eyebrow">Phase 2 · Module 2.1</div>
+    <h1>The Option Greeks (Delta, Theta, Vega, Gamma, Rho)</h1>
+
+    <div class="visual-card" style="margin-top:0; padding:10px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="100%" style="height:auto; display:block;">
+  <defs>
+    <linearGradient id="greeks-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090e14" />
+      <stop offset="100%" stop-color="#111a24" />
+    </linearGradient>
+  </defs>
+
+  <!-- Container -->
+  <rect width="900" height="480" rx="14" fill="url(#greeks-bg)" stroke="#293443" stroke-width="2"/>
+
+  <!-- Title Header -->
+  <text x="450" y="42" text-anchor="middle" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="20" font-weight="700">
+    THE OPTION GREEKS: SENSITIVITY MATRIX
+  </text>
+  <text x="450" y="65" text-anchor="middle" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="13">
+    The mathematical levers governing option contract pricing and risk exposure
+  </text>
+
+  <!-- Quadrant 1: Delta -->
+  <g transform="translate(30, 90)">
+    <rect width="405" height="170" rx="10" fill="#121d28" stroke="#334155" stroke-width="1.5"/>
+    <rect x="18" y="16" width="36" height="36" rx="8" fill="#183323" stroke="#2e4d3b"/>
+    <text x="36" y="41" text-anchor="middle" fill="#9ceeab" font-family="Georgia, serif" font-size="22" font-weight="700">Δ</text>
+
+    <text x="66" y="32" fill="#9ceeab" font-family="system-ui, sans-serif" font-size="16" font-weight="700">DELTA: Direction &amp; Probability</text>
+    <text x="66" y="48" fill="#94a3b8" font-family="monospace" font-size="11">∂V / ∂S • Price change per $1.00 stock move</text>
+
+    <line x1="20" y1="65" x2="385" y2="65" stroke="#334155"/>
+
+    <text x="20" y="90" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#f8fafc">Calls:</tspan> 0.00 to +1.00 | <tspan font-weight="700" fill="#f8fafc">Puts:</tspan> 0.00 to -1.00</text>
+    <text x="20" y="112" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#ffd089">Share Equivalence:</tspan> 0.50 Delta = Holding 50 shares</text>
+    <text x="20" y="134" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#9ceeab">POP Proxy:</tspan> Absolute delta rough probability of expiring ITM</text>
+    <text x="20" y="154" fill="#7ebaff" font-family="system-ui, sans-serif" font-size="11" font-weight="600">→ Defined-Risk Target: Sell 16–20 Delta (~1 Std Dev OTM)</text>
+  </g>
+
+  <!-- Quadrant 2: Theta -->
+  <g transform="translate(465, 90)">
+    <rect width="405" height="170" rx="10" fill="#121d28" stroke="#334155" stroke-width="1.5"/>
+    <rect x="18" y="16" width="36" height="36" rx="8" fill="#16273c" stroke="#264166"/>
+    <text x="36" y="41" text-anchor="middle" fill="#7ebaff" font-family="Georgia, serif" font-size="22" font-weight="700">θ</text>
+
+    <text x="66" y="32" fill="#7ebaff" font-family="system-ui, sans-serif" font-size="16" font-weight="700">THETA: Time Decay Clock</text>
+    <text x="66" y="48" fill="#94a3b8" font-family="monospace" font-size="11">∂V / ∂t • Daily price decay per calendar day</text>
+
+    <line x1="20" y1="65" x2="385" y2="65" stroke="#334155"/>
+
+    <text x="20" y="90" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#ffada3">Buyers:</tspan> Pay negative theta daily (constant drag)</text>
+    <text x="20" y="112" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#9ceeab">Sellers:</tspan> Collect positive theta decay every sunrise</text>
+    <text x="20" y="134" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#ffd089">Decay Curve:</tspan> Slow at 90 DTE, steep cliff inside 30–45 DTE</text>
+    <text x="20" y="154" fill="#9ceeab" font-family="system-ui, sans-serif" font-size="11" font-weight="600">→ Strategy Rule: Enter 35–45 DTE; Close at 50% profit or 21 DTE</text>
+  </g>
+
+  <!-- Quadrant 3: Vega -->
+  <g transform="translate(30, 280)">
+    <rect width="405" height="170" rx="10" fill="#121d28" stroke="#334155" stroke-width="1.5"/>
+    <rect x="18" y="16" width="36" height="36" rx="8" fill="#2d2212" stroke="#5c431e"/>
+    <text x="36" y="41" text-anchor="middle" fill="#ffd089" font-family="Georgia, serif" font-size="22" font-weight="700">ν</text>
+
+    <text x="66" y="32" fill="#ffd089" font-family="system-ui, sans-serif" font-size="16" font-weight="700">VEGA: Implied Volatility Sensitivity</text>
+    <text x="66" y="48" fill="#94a3b8" font-family="monospace" font-size="11">∂V / ∂σ • Price change per 1.0% change in IV</text>
+
+    <line x1="20" y1="65" x2="385" y2="65" stroke="#334155"/>
+
+    <text x="20" y="90" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#f8fafc">All options</tspan> expand in price when IV rises</text>
+    <text x="20" y="112" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#9ceeab">Volatility Crush:</tspan> Post-earnings or panic collapse deflates price</text>
+    <text x="20" y="134" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#ffd089">The Edge:</tspan> IV overstates realized move ~83% of historical time</text>
+    <text x="20" y="154" fill="#ffd089" font-family="system-ui, sans-serif" font-size="11" font-weight="600">→ Entry Filter: Sell when IV Rank &gt; 35; Buy debit when IVR &lt; 20</text>
+  </g>
+
+  <!-- Quadrant 4: Gamma -->
+  <g transform="translate(465, 280)">
+    <rect width="405" height="170" rx="10" fill="#121d28" stroke="#334155" stroke-width="1.5"/>
+    <rect x="18" y="16" width="36" height="36" rx="8" fill="#331818" stroke="#5a2e2e"/>
+    <text x="36" y="41" text-anchor="middle" fill="#ffada3" font-family="Georgia, serif" font-size="22" font-weight="700">Γ</text>
+
+    <text x="66" y="32" fill="#ffada3" font-family="system-ui, sans-serif" font-size="16" font-weight="700">GAMMA: Delta Acceleration &amp; Risk</text>
+    <text x="66" y="48" fill="#94a3b8" font-family="monospace" font-size="11">∂Δ / ∂S • Rate of change of Delta per $1 stock move</text>
+
+    <line x1="20" y1="65" x2="385" y2="65" stroke="#334155"/>
+
+    <text x="20" y="90" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• Measures how fast directional exposure shifts against you</text>
+    <text x="20" y="112" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#ffada3">The Danger Zone:</tspan> Explodes for ATM options inside final 7 DTE</text>
+    <text x="20" y="134" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="12">• <tspan font-weight="700" fill="#9ceeab">Spread Protection:</tspan> Long protective wing places hard ceiling on gamma</text>
+    <text x="20" y="154" fill="#ffada3" font-family="system-ui, sans-serif" font-size="11" font-weight="600">→ Survival Rule: Never hold short options into expiration week</text>
+  </g>
+</svg>
+    </div>
+
+    <div class="card">
+      <h2>1. The First-Principles Foundation: Partial Derivatives</h2>
+      <p>Option pricing is not speculative guesswork; it is governed by mathematical pricing models (such as Black-Scholes-Merton and Bjerksund-Stensland). Because multiple market variables shift simultaneously, quantitative finance uses <strong>The Greeks</strong>—the partial derivatives of the pricing model—to isolate and measure price sensitivity to exactly one factor at a time, holding all other inputs constant:</p>
+      
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="eyebrow" style="color:var(--mint)">Delta (&Delta;) 📐</div>
+          <div class="stat-val">&part;V / &part;S</div>
+          <div class="small muted">Sensitivity to a $1.00 move in underlying price</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow" style="color:var(--blue)">Theta (&Theta;) ⏳</div>
+          <div class="stat-val">&part;V / &part;t</div>
+          <div class="small muted">Theoretical decay per 1 calendar day passing</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow" style="color:var(--amber)">Vega (&Nu;) 🌊</div>
+          <div class="stat-val">&part;V / &part;&sigma;</div>
+          <div class="small muted">Sensitivity to a 1 percentage point (1.0%) IV move</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow" style="color:var(--loss)">Gamma (&Gamma;) ⚡</div>
+          <div class="stat-val">&part;&Delta; / &part;S</div>
+          <div class="small muted">Rate of change in Delta per $1.00 stock move</div>
+        </div>
+      </div>
+
+      <p style="margin-top:14px; font-size:14px; color:var(--muted);">
+        <strong>Rho (&rho; = &part;V / &part;r):</strong> Measures sensitivity to a 1-percentage-point change in benchmark risk-free interest rates. Higher rates slightly increase call premiums and decrease put premiums due to cost-of-carry financing dynamics.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>2. Delta (&Delta;): Direction, Share Equivalence & Probability Heuristic</h2>
+      <p>Delta provides three primary analytical insights for options traders:</p>
+      <ul>
+        <li><strong>Local Price Sensitivity:</strong> A Call with a +0.40 Delta gains approximately $0.40 in premium if the underlying stock rises by $1.00 (holding volatility and time constant). A Put with a -0.30 Delta gains approximately $0.30 if the stock drops by $1.00.</li>
+        <li><strong>Share Equivalence:</strong> Multiplying Delta by the 100-share multiplier gives your instantaneous equivalent share position. One +0.50 Delta Call behaves locally like owning <strong>50 shares of stock</strong> (0.50 &times; 100).</li>
+        <li><strong>Probability Proxy (POP Heuristic):</strong> While technically a mathematical price slope, absolute Delta (|&Delta;|) is commonly used as a rough heuristic for the probability of an option expiring In-The-Money (ITM). A 0.16 Delta Put has roughly an <strong>~16% theoretical probability of expiring ITM</strong>. <em>Note: Probability of expiring ITM is not identical to Probability of Profit (POP), which depends on net credit received and your chosen exit policy.</em></li>
+      </ul>
+
+      <div class="callout">
+        <strong>🎯 Screening Rule of Thumb (16–20 Delta):</strong> In our defined-risk credit spread approach, we screen for short strikes around 16–20 Delta (roughly 1 standard deviation OTM). This provides a meaningful statistical buffer against normal price fluctuations, though it does not guarantee a profitable outcome.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Theta (&Theta;) & Vega (&Nu;): Time Decay vs. Volatility</h2>
+      <p>Options are perishable contracts whose extrinsic value diminishes over time:</p>
+      
+      <div class="visual-card">
+        <div class="visual-title">⏳ Delta Slope Across Underlying Prices & ATM Theta Acceleration</div>
+        <svg viewBox="0 0 740 280" role="img" aria-label="Delta and Theta Curves">
+          <rect x="10" y="10" width="720" height="260" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Left Chart: Call Delta Curve -->
+          <g transform="translate(30, 25)">
+            <text x="0" y="18" fill="#7ebaff" font-size="13" font-weight="700">Call Delta vs Underlying Price ($100 Strike)</text>
+            <line x1="20" y1="180" x2="310" y2="180" stroke="#344354" stroke-width="1.5"/>
+            <line x1="20" y1="40" x2="20" y2="180" stroke="#344354" stroke-width="1.5"/>
+            <text x="165" y="198" text-anchor="middle" fill="#a7b6c8" font-size="11">Underlying Stock Price ($)</text>
+            <!-- S-Curve showing delta rising as stock price rises -->
+            <path d="M 20 175 C 90 175, 130 160, 165 110 C 200 60, 240 45, 310 45" fill="none" stroke="#7ebaff" stroke-width="3"/>
+            <circle cx="165" cy="110" r="5" fill="#ffd089"/>
+            <text x="175" y="115" fill="#ffd089" font-size="11">ATM ($100): &Delta; &approx; 0.50</text>
+            <text x="35" y="165" fill="#ffada3" font-size="10">OTM ($80): &Delta; &rarr; 0</text>
+            <text x="240" y="40" fill="#9ceeab" font-size="10">ITM ($120): &Delta; &rarr; 1.0</text>
+          </g>
+
+          <!-- Right Chart: Theta Exponential Decay Curve -->
+          <g transform="translate(390, 25)">
+            <text x="0" y="18" fill="#9ceeab" font-size="13" font-weight="700">ATM Theta Decay vs Days to Expiration (DTE)</text>
+            <line x1="20" y1="180" x2="310" y2="180" stroke="#344354" stroke-width="1.5"/>
+            <line x1="310" y1="40" x2="310" y2="180" stroke="#344354" stroke-width="1.5"/>
+            <text x="165" y="198" text-anchor="middle" fill="#a7b6c8" font-size="11">Days to Expiration (DTE)</text>
+            <!-- Curve from 90 DTE down to 0 DTE -->
+            <path d="M 20 170 C 120 160, 200 140, 250 100 C 280 75, 300 50, 310 40" fill="none" stroke="#9ceeab" stroke-width="3"/>
+            <rect x="180" y="60" width="120" height="40" rx="4" fill="#1b2e24" stroke="#2e4d3b"/>
+            <text x="240" y="78" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">30–45 DTE Window</text>
+            <text x="240" y="92" text-anchor="middle" fill="#a7b6c8" font-size="9">Accelerating decay with manageable gamma</text>
+            <text x="25" y="188" fill="#a7b6c8" font-size="10">90 DTE</text>
+            <text x="180" y="188" fill="#ffd089" font-size="10">45 DTE</text>
+            <text x="290" y="188" fill="#ffada3" font-size="10">0 DTE</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚡ The Late-Stage Gamma Risk:</strong> As expiration approaches, Theta decay accelerates for At-The-Money options, but <strong>Gamma spikes dramatically</strong>. If the stock hovers near your short strike in the final week, small underlying price moves produce rapid, violent swings in Delta and position P&L. Managing positions around 21 DTE helps avoid this explosive gamma territory.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. Net Greeks on a Defined-Risk Spread</h2>
+      <p>When trading vertical spreads, position sensitivities are calculated using signed quantities: <code>Net Greek = &Sigma;(Quantity &times; Leg Greek)</code> where long contracts have Quantity = +1 and short contracts have Quantity = -1:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Greek</th><th>Sold Short Leg ($95 Put)</th><th>Bought Long Leg ($90 Put)</th><th>Net Position Greek</th><th>Practical Interpretation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Delta (&Delta;)</strong></td><td>-(-0.28) = +0.28</td><td>+(-0.14) = -0.14</td><td><strong style="color:var(--mint)">+0.14</strong></td><td>Mildly bullish (instantaneously tracks like owning 14 shares)</td></tr>
+            <tr><td><strong>Theta (&Theta;)</strong></td><td>-(+0.05) = +0.05</td><td>+(-0.02) = -0.02</td><td><strong style="color:var(--mint)">+0.03</strong></td><td>Initial positive time decay (~+$3.00 USD/day at current price)</td></tr>
+            <tr><td><strong>Vega (&Nu;)</strong></td><td>-(-0.08) = -0.08</td><td>+(+0.04) = +0.04</td><td><strong style="color:var(--blue)">-0.04</strong></td><td>Net short volatility at current price (profits if IV contracts)</td></tr>
+            <tr><td><strong>Gamma (&Gamma;)</strong></td><td>-(+0.03) = -0.03</td><td>+(+0.01) = +0.01</td><td><strong style="color:var(--loss)">-0.02</strong></td><td>Net negative gamma; note that gamma can surge if stock nears strikes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">Note: Spread Greeks are dynamic local sensitivities. If the stock drops near the long strike, net theta and vega signs can invert prior to expiration.</p>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 2.1</h2>
+      <div class="question">
+        <strong>Question:</strong> You sell a Bull Put Spread that currently has a Net Delta of +0.12. If the stock falls by $2.00 tomorrow with no change in time or volatility, what is the approximate local price effect on your spread?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Net Delta of +0.12 means a $1 drop reduces position value by ~$0.12 per share. A $2.00 drop results in: 0.12 × (-$2.00) × 100 = -$24.00 USD loss from directional movement alone.')">
+        A) The position loses approximately $24.00 USD from the directional move alone.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Remember the 100x multiplier: 0.12 × (-$2.00) = -$0.24 per share = -$24.00 per contract.')">
+        B) The position loses $0.24 USD total.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Positive delta means you profit when the stock rises and lose when it drops.')">
+        C) The position gains $24.00 USD because time decay helps short options.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m2_2: `
+    <div class="eyebrow">Phase 2 · Module 2.2</div>
+    <h1>Implied Volatility (IV) & Understanding the Volatility Risk Premium</h1>
+
+    <div class="card">
+      <h2>1. Historical Volatility (HV) vs. Implied Volatility (IV)</h2>
+      <p>To evaluate option pricing, you must distinguish between actual price history and forward market pricing:</p>
+      <ul>
+        <li><strong>Historical Volatility (HV):</strong> The annualized standard deviation of past log-returns of the underlying stock over a specific lookback window (e.g., 20, 30, or 252 trading days). It measures past movement.</li>
+        <li><strong>Implied Volatility (IV):</strong> The annualized expected volatility implied by current market option prices when solved through an options pricing model. It represents the market's collective forward-looking consensus.</li>
+      </ul>
+
+      <div class="callout">
+        <strong>💎 The Volatility Risk Premium (VRP):</strong><br>
+        Empirical financial studies (including Cboe research on equity index options like the S&P 500) demonstrate that <strong>Implied Volatility has historically traded higher on average than subsequently realized volatility</strong> over matching horizons. Buyers pay a premium for downside insurance, creating a potential variance risk premium that options sellers attempt to capture. However, buying protective wings also purchases volatility, so managing net exposure and sizing remains vital.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. IV Rank (IVR) vs. IV Percentile (IVP)</h2>
+      <p>Absolute IV levels vary widely across assets. Contextualizing IV against historical data requires two key metrics:</p>
+
+      <div class="grid-2">
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--mint)">IV Rank (IVR) — Range-Based</div>
+          <p style="font-size:13px; margin:6px 0;"><code>IV Rank = 100 × (Current IV - 52W Low IV) / (52W High IV - 52W Low IV)</code></p>
+          <div class="small muted">Measures where current IV sits relative to its 1-year absolute high-low range. Note: A single extreme spike can compress IV Rank for the rest of the year.</div>
+        </div>
+
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--blue)">IV Percentile (IVP) — Days-Based</div>
+          <p style="font-size:13px; margin:6px 0;"><code>IV Percentile = 100 × (Days with IV &lt; Current IV) / (Total Trading Days)</code></p>
+          <div class="small muted">Measures the percentage of trading days over the past year that traded below current IV. More resistant to single-day outlier spikes.</div>
+        </div>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-title">📊 Expected Move Normal Distribution & IV Rank Context</div>
+        <svg viewBox="0 0 740 250" role="img" aria-label="IV Distribution and Mean Reversion">
+          <rect x="10" y="10" width="720" height="230" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Bell curve -->
+          <g transform="translate(35, 25)">
+            <text x="0" y="18" fill="#ffd089" font-size="13" font-weight="700">1 Standard Deviation Expected Move (~68.2%)</text>
+            <line x1="20" y1="160" x2="350" y2="160" stroke="#344354" stroke-width="1.5"/>
+            <!-- Bell curve path -->
+            <path d="M 20 158 Q 110 155, 140 110 Q 185 10, 230 110 Q 260 155, 350 158" fill="none" stroke="#7ebaff" stroke-width="3"/>
+            <!-- 1 sigma fill -->
+            <rect x="140" y="70" width="90" height="90" fill="#1b2a3d" opacity="0.4"/>
+            <line x1="185" y1="20" x2="185" y2="160" stroke="#ffd089" stroke-width="1.5" stroke-dasharray="4"/>
+            <text x="185" y="175" text-anchor="middle" fill="#ffd089" font-size="10">Underlying Price ($100)</text>
+            <text x="140" y="175" text-anchor="middle" fill="#9ceeab" font-size="10">-1&sigma; ($92)</text>
+            <text x="230" y="175" text-anchor="middle" fill="#9ceeab" font-size="10">+1&sigma; ($108)</text>
+            <text x="185" y="90" text-anchor="middle" fill="#9ceeab" font-size="12" font-weight="700">~68.2%</text>
+          </g>
+
+          <!-- IV Rank Thermometer -->
+          <g transform="translate(425, 35)">
+            <text x="0" y="12" fill="#eef3fa" font-size="13" font-weight="700">IV Rank Contextual Guide</text>
+            <rect x="20" y="30" width="40" height="140" rx="8" fill="#121b25" stroke="#293443"/>
+            <rect x="24" y="34" width="32" height="40" rx="4" fill="#3a1c1c"/>
+            <rect x="24" y="74" width="32" height="40" rx="4" fill="#302613"/>
+            <rect x="24" y="114" width="32" height="52" rx="4" fill="#12251a"/>
+            <!-- Indicator at 75 -->
+            <polygon points="70,50 85,43 85,57" fill="#ffd089"/>
+            <text x="92" y="54" fill="#ffd089" font-size="13" font-weight="700">IVR = 75 (Elevated Premium)</text>
+            <text x="75" y="105" fill="#a7b6c8" font-size="11">IVR 35–50: Typical Credit Baseline</text>
+            <text x="75" y="150" fill="#708296" font-size="11">IVR &lt; 20: Subdued Volatility</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 2.2</h2>
+      <div class="question">
+        <strong>Question:</strong> Stock XYZ had a 52-week low IV of 20% and a high IV of 60%. Today its IV is 50%. What is its current IV Rank?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Correct! IV Rank = 100 × (50 - 20) / (60 - 20) = 100 × 30 / 40 = 75%. This indicates that current IV is in the upper quartile of its 52-week range.')">
+        A) IV Rank = 75%
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Check the math: (50 - 20) / (60 - 20) = 30 / 40 = 0.75 = 75%.')">
+        B) IV Rank = 50%
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'IV Rank is calculated against the 52-week range, not absolute IV.')">
+        C) IV Rank = 30%
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m2_3: `
+    <div class="eyebrow">Phase 2 · Module 2.3</div>
+    <h1>Reading Financial Statements (10-K, FCF, Debt Coverage)</h1>
+
+    <div class="card">
+      <h2>1. The Option Seller's Due Diligence</h2>
+      <p>When selling options where assignment could occur (like Cash-Secured Puts) or defending short strikes (in credit spreads), understanding the underlying business's solvency is essential. Form 10-K provides audited filings to inspect:</p>
+      <ol>
+        <li><strong>Item 1 (Business):</strong> Operating revenue drivers and customer base.</li>
+        <li><strong>Item 1A (Risk Factors):</strong> Regulatory, customer concentration, and liquidity risks.</li>
+        <li><strong>Item 7 (MD&A):</strong> Management’s discussion on liquidity, cash flows, and capital expenditure needs.</li>
+        <li><strong>Item 8 (Financial Statements):</strong> Income statement, balance sheet, cash flows, and debt maturity notes.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>2. Three Fundamental Health Metrics</h2>
+      
+      <div class="grid-3">
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--mint)">1. Free Cash Flow (FCF)</div>
+          <p style="font-size:12px; margin:6px 0;" class="muted">FCF = Operating Cash Flow - CapEx</p>
+          <p style="font-size:13px; margin:0;">Common FCF measures operational cash remaining after capital investments. Consistent positive FCF indicates the company can self-fund without relying on dilutive equity raises or debt.</p>
+        </div>
+
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--blue)">2. Interest Coverage &gt; 5&times;</div>
+          <p style="font-size:12px; margin:6px 0;" class="muted">Coverage = EBIT / Interest Expense</p>
+          <p style="font-size:13px; margin:0;">Measures how comfortably operating profit covers annual borrowing costs. A cushion &gt; 5&times; provides safety if operating profits experience a cyclical decline.</p>
+        </div>
+
+        <div class="stat-box" style="text-align:left;">
+          <div class="eyebrow" style="color:var(--amber)">3. LT Debt / Equity &lt; 0.50</div>
+          <p style="font-size:12px; margin:6px 0;" class="muted">LT Debt / Total Shareholder Equity</p>
+          <p style="font-size:13px; margin:0;">Helps screen for conservative capital structures. Note: Always inspect cash reserves, upcoming maturity schedules, and total liabilities.</p>
+        </div>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-title">💧 The 3 Financial Statements Overview</div>
+        <svg viewBox="0 0 740 200" role="img" aria-label="Financial Statements Waterfall">
+          <rect x="10" y="10" width="720" height="180" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <g transform="translate(30, 30)">
+            <rect x="0" y="0" width="200" height="130" rx="8" fill="#121b25" stroke="#293443"/>
+            <text x="100" y="26" text-anchor="middle" fill="#7ebaff" font-size="13" font-weight="700">Income Statement</text>
+            <text x="20" y="55" fill="#a7b6c8" font-size="11">Revenue &rarr; Operating Profit (EBIT)</text>
+            <text x="20" y="75" fill="#a7b6c8" font-size="11">Interest Expense &amp; Taxes</text>
+            <text x="20" y="95" fill="#a7b6c8" font-size="11">Net Income &amp; Diluted EPS</text>
+            <text x="20" y="115" fill="#ffd089" font-size="10">Examine margin trends over 3–5 yrs</text>
+          </g>
+
+          <line x1="230" y1="95" x2="270" y2="95" stroke="#9ceeab" stroke-width="2"/>
+
+          <g transform="translate(270, 30)">
+            <rect x="0" y="0" width="200" height="130" rx="8" fill="#121b25" stroke="#293443"/>
+            <text x="100" y="26" text-anchor="middle" fill="#9ceeab" font-size="13" font-weight="700">Cash Flow Statement</text>
+            <text x="20" y="55" fill="#a7b6c8" font-size="11">Cash Flow from Operations (CFO)</text>
+            <text x="20" y="75" fill="#ffada3" font-size="11">- Capital Expenditures (CapEx)</text>
+            <text x="20" y="95" fill="#9ceeab" font-size="12" font-weight="700">= Free Cash Flow (FCF)</text>
+            <text x="20" y="115" fill="#ffd089" font-size="10">Verify earnings turn into cash</text>
+          </g>
+
+          <line x1="470" y1="95" x2="510" y2="95" stroke="#9ceeab" stroke-width="2"/>
+
+          <g transform="translate(510, 30)">
+            <rect x="0" y="0" width="190" height="130" rx="8" fill="#121b25" stroke="#293443"/>
+            <text x="95" y="26" text-anchor="middle" fill="#ffd089" font-size="13" font-weight="700">Balance Sheet</text>
+            <text x="20" y="55" fill="#a7b6c8" font-size="11">Cash &amp; Liquid Equivalents</text>
+            <text x="20" y="75" fill="#a7b6c8" font-size="11">Total Interest-Bearing Debt</text>
+            <text x="20" y="95" fill="#a7b6c8" font-size="11">Shareholder Equity</text>
+            <text x="20" y="115" fill="#9ceeab" font-size="10">Check debt maturities &amp; liquidity</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 2.3</h2>
+      <div class="question">
+        <strong>Question:</strong> Company ABC reports $120M in Operating Cash Flow and $45M in Capital Expenditures. It reports $50M in EBIT and $8M in annual interest expense. How do its metrics compare to our starter thresholds?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! FCF = $120M - $45M = +$75M (positive cash flow). Interest coverage = $50M / $8M = 6.25×, exceeding the 5× guideline.')">
+        A) FCF is +$75M and interest coverage is 6.25×, comfortably meeting both starter criteria.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'FCF is positive: 120 - 45 = +75M.')">
+        B) FCF is negative.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, '50 / 8 = 6.25×, which is above 5×.')">
+        C) Interest coverage fails the 5× guideline.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m2_4: `
+    <div class="eyebrow">Phase 2 · Module 2.4</div>
+    <h1>Step-by-Step FINVIZ Stock Screener Recipe</h1>
+
+    <div class="visual-card" style="margin-top:0; padding:10px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="100%" style="height:auto; display:block;">
+  <defs>
+    <linearGradient id="funnel-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090e14" />
+      <stop offset="100%" stop-color="#121b25" />
+    </linearGradient>
+  </defs>
+
+  <!-- Container -->
+  <rect width="900" height="360" rx="14" fill="url(#funnel-bg)" stroke="#293443" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="450" y="38" text-anchor="middle" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="20" font-weight="700">
+    THE QUANTITATIVE STOCK SCREENING FUNNEL
+  </text>
+  <text x="450" y="58" text-anchor="middle" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="13">
+    Filtering 8,000+ public US equities down to the top 1% liquid, solvent candidates
+  </text>
+
+  <!-- Funnel Tier 1: Total Universe -->
+  <g transform="translate(100, 85)">
+    <polygon points="0,0 700,0 640,50 60,50" fill="#17222f" stroke="#334155"/>
+    <text x="350" y="24" text-anchor="middle" fill="#f8fafc" font-size="14" font-weight="700">TIER 1: TOTAL US PUBLIC UNIVERSE (~8,500 Equities)</text>
+    <text x="350" y="42" text-anchor="middle" fill="#cbd5e1" font-size="12">Filter: Stocks Only • Market Cap &gt; $10B (Large Cap) • Average Volume &gt; 1M shares</text>
+  </g>
+
+  <!-- Funnel Tier 2: Option Liquidity -->
+  <g transform="translate(100, 145)">
+    <polygon points="60,0 640,0 580,50 120,50" fill="#1b2a3d" stroke="#28446b"/>
+    <text x="350" y="24" text-anchor="middle" fill="#7ebaff" font-size="14" font-weight="700">TIER 2: LIQUID OPTIONS UNIVERSE (~600 Equities)</text>
+    <text x="350" y="42" text-anchor="middle" fill="#cbd5e1" font-size="12">Filter: Optionable • Open Interest &gt; 500 • Bid-Ask Spread ≤ $0.05 to $0.10</text>
+  </g>
+
+  <!-- Funnel Tier 3: Fundamental Solvency -->
+  <g transform="translate(100, 205)">
+    <polygon points="120,0 580,0 520,50 180,50" fill="#152720" stroke="#25543c"/>
+    <text x="350" y="24" text-anchor="middle" fill="#ffd089" font-size="14" font-weight="700">TIER 3: FUNDAMENTAL SAFETY &amp; QUALITY (~120 Equities)</text>
+    <text x="350" y="42" text-anchor="middle" fill="#cbd5e1" font-size="12">Filter: LT Debt/Equity &lt; 0.50 • ROE &gt; +10% • Net Margin &gt; 10% • FCF Positive</text>
+  </g>
+
+  <!-- Funnel Tier 4: Small-Account Price Fit -->
+  <g transform="translate(100, 265)">
+    <rect x="180" y="0" width="340" height="55" rx="8" fill="#14281e" stroke="#2e5940" stroke-width="2"/>
+    <text x="350" y="24" text-anchor="middle" fill="#9ceeab" font-size="15" font-weight="800">TIER 4: $10,000 NZD PORTFOLIO FIT (~25–35 Equities)</text>
+    <text x="350" y="42" text-anchor="middle" fill="#9ceeab" font-size="12">Filter: Share Price $20 to $50 USD • IV Rank &gt; 35% • Prime Defined-Risk Setup</text>
+  </g>
+</svg>
+    </div>
+
+    <div class="card">
+      <h2>1. The Quantitative Research Funnel</h2>
+      <p>Screeners generate candidates for research—they do not produce automated trade signals. Using standardized filters helps remove speculative penny stocks and illiquid options chains:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Filter Field</th><th>Starter Setting</th><th>Purpose / Rationale</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Industry</strong></td><td>Stocks only (ex-Funds)</td><td>Separates corporate issuers from closed-end funds or trusts.</td></tr>
+            <tr><td><strong>Market Cap</strong></td><td>+Large (&gt; $10 Billion)</td><td>Screens for established, capitalized companies.</td></tr>
+            <tr><td><strong>Average Volume</strong></td><td>Over 1 Million shares</td><td>Underlying equity liquidity indicator.</td></tr>
+            <tr><td><strong>Option/Short</strong></td><td>Optionable</td><td>Confirms exchange-listed options chains exist.</td></tr>
+            <tr><td><strong>LT Debt/Equity</strong></td><td>Under 0.5</td><td>Starter filter for conservative balance-sheet leverage.</td></tr>
+            <tr><td><strong>Return on Equity</strong></td><td>Over +10%</td><td>Screens for profitable capital deployment.</td></tr>
+            <tr><td><strong>Net Profit Margin</strong></td><td>Over 10%</td><td>Screens for positive net operating earnings.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. What to Discard Manually</h2>
+      <ul>
+        <li><strong>Binary Catalyst Companies:</strong> Pre-revenue biotech firms facing pending FDA decisions can gap 60–80% overnight, breaching spread strikes.</li>
+        <li><strong>Thin Option Liquidity:</strong> Even if equity volume is &gt; 1M, always inspect the specific strike and expiration contract quotes for tight bid-ask spreads (&le; $0.05–$0.10) and open interest (&gt; 500).</li>
+        <li><strong>Pending Earnings Dates:</strong> Exclude candidates with scheduled quarterly earnings before the targeted expiration date to avoid event-gap risk.</li>
+      </ul>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 2.4</h2>
+      <div class="question">
+        <strong>Question:</strong> A company passes every numerical screener filter with flying colors. What is the correct next step?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Correct! A screener only provides an initial shortlist. You must verify actual option quotes, earnings calendar dates, valuation, and account risk limits before trading.')">
+        A) Inspect the actual option chain for executable quotes, verify the earnings calendar, and check position sizing.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Passing a screener is not an automated entry signal.')">
+        B) Sell a credit spread immediately.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m2_5: `
+    <div class="eyebrow">Phase 2 · Module 2.5</div>
+    <h1>ETF Screener Recipe (Fees, AUM, Holdings)</h1>
+
+    <div class="card">
+      <h2>1. The ETF Structure for Defined-Risk Trading</h2>
+      <p>Broad-market Exchange Traded Funds (ETFs) hold baskets of underlying equities, offering unique characteristics for defined-risk option selling:</p>
+      <ul>
+        <li><strong>No Single-Company Bankruptcy:</strong> Broad-market index ETFs (e.g. SPY, IWM, QQQ) eliminate single-company insolvency risk.</li>
+        <li><strong>No Individual Earnings Gaps:</strong> Earnings reports are dispersed across hundreds of holdings, reducing overnight gap risk.</li>
+        <li><strong>Option Chain Liquidity:</strong> Major index and sector ETFs offer dense strike listings with tight bid-ask spreads.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. Essential ETF Screening Filters</h2>
+      
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="eyebrow">1. AUM &gt; $1 Billion</div>
+          <div class="stat-val">$1B+</div>
+          <div class="small muted">Ensures fund viability & liquidity</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">2. Expense Ratio &lt; 0.30%</div>
+          <div class="stat-val">&lt; 0.30%</div>
+          <div class="small muted">Low operational drag</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">3. Holdings &gt; 100</div>
+          <div class="stat-val">100+</div>
+          <div class="small muted">Broad underlying diversification</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">4. Option Chain Liquidity</div>
+          <div class="stat-val">&le; $0.05 spread</div>
+          <div class="small muted">Tight bid-ask on active strikes</div>
+        </div>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ Avoid Leveraged / Inverse ETFs:</strong> Leveraged products (e.g. 2x, 3x) use daily derivative rebalancing that suffers from compounding volatility drag over longer holding periods. They are not designed as small-account buy-and-hold or cash-secured put candidates.
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 2.5</h2>
+      <div class="question">
+        <strong>Question:</strong> An ETF has a high 12% distribution yield, an expense ratio of 0.85%, and holds only 8 stocks with covered call overlays. Does this fit our broad-market starter ETF criteria?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Correct! High fees (0.85% vs <0.30%), extreme concentration (8 holdings vs 100+), and derivative yield structures fail our diversified broad-market checks.')">
+        A) No: High expense ratio, concentration risk (8 holdings), and derivative overlays fail our starter criteria.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Distribution yield is not total return and sacrifices upside appreciation.')">
+        B) Yes: A high distribution yield guarantees a positive return.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+
+  // Phase 3
+  m3_1: `
+    <div class="eyebrow">Phase 3 · Module 3.1</div>
+    <h1>Vertical Credit Spreads (Bull Put & Bear Call)</h1>
+
+    <div class="card">
+      <h2>1. The Core Architecture of a Defined-Risk Spread</h2>
+      <p>A <strong>Vertical Credit Spread</strong> combines two options of the same expiration date and underlying asset, where you sell one option closer to the money (collecting higher premium) and simultaneously buy another option further out of the money (buying protective insurance).</p>
+      
+      <p>Because the sold option is closer to the current stock price than the bought option, you collect a <strong>net cash credit</strong> upfront:</p>
+      <ul>
+        <li><strong>Bull Put Spread (Credit Put Spread):</strong> Mildly bullish to neutral bias. Sell a higher-strike Put ($K_2$), Buy a lower-strike Put ($K_1$).</li>
+        <li><strong>Bear Call Spread (Credit Call Spread):</strong> Mildly bearish to neutral bias. Sell a lower-strike Call ($K_1$), Buy a higher-strike Call ($K_2$).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. The Fundamental Mathematics</h2>
+      
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="eyebrow">Max Profit</div>
+          <div class="stat-val positive">Net Credit × 100</div>
+          <div class="small muted">Achieved if both options expire OTM</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Max Contractual Loss</div>
+          <div class="stat-val negative">(Width - Credit) × 100</div>
+          <div class="small muted">Strictly capped downside floor</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Breakeven Price</div>
+          <div class="stat-val">Short Strike &plusmn; Credit</div>
+          <div class="small muted">Put: Strike - Credit | Call: Strike + Credit</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>🎯 Screening Guideline: The "Rule of Thirds" Target:</strong><br>
+        When evaluating candidate credit spreads, quantitative traders often target collecting approximately <strong>1/3 of the strike width</strong> in net credit as a risk-to-reward filter:
+        <ul>
+          <li>On a <strong>$1.00 wide spread:</strong> Target ~<strong>$0.33 to $0.35 credit</strong> (Max Profit: $35, Max Loss: $65 &rarr; 1.86 : 1 Risk:Reward).</li>
+          <li>On a <strong>$3.00 wide spread:</strong> Target ~<strong>$1.00 credit</strong> (Max Profit: $100, Max Loss: $200 &rarr; 2.00 : 1 Risk:Reward).</li>
+        </ul>
+        <em>Important Note:</em> Collecting 1/3 of the width at 16–20 Delta is a candidate filter, not an automatic guarantee of positive expectancy. Actual expectancy depends on real market fills, execution costs, and disciplined trade management.
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-title">📈 Bull Put Spread vs Bear Call Spread Payoffs</div>
+        <svg viewBox="0 0 740 230" role="img" aria-label="Credit Spreads Payoff Curves">
+          <rect x="10" y="10" width="720" height="210" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Bull Put: Long $90, Short $95, Credit $1.50 -> Max Gain +150, Max Loss -350, BE $93.50 -->
+          <g transform="translate(30, 20)">
+            <text x="0" y="20" fill="#9ceeab" font-size="13" font-weight="700">Bull Put Spread (Sell $95 Put / Buy $90 Put for $1.50 Credit)</text>
+            <line x1="20" y1="120" x2="320" y2="120" stroke="#344354" stroke-width="1.5"/>
+            <!-- Linear dollar mapping: ZeroY=120, +$150 -> Y=82.5, -$350 -> Y=207.5. Scale: 0.25 px per dollar -->
+            <!-- $90 -> x=100, $95 -> x=200, BE $93.50 -> x=170 -->
+            <polyline points="20,172.5 100,172.5 200,97.5 320,97.5" fill="none" stroke="#9ceeab" stroke-width="3"/>
+            <circle cx="100" cy="172.5" r="4" fill="#ffada3"/>
+            <text x="80" y="188" fill="#ffada3" font-size="10">Long $90</text>
+            <circle cx="200" cy="97.5" r="4" fill="#ffd089"/>
+            <text x="180" y="85" fill="#ffd089" font-size="10">Short $95</text>
+            <circle cx="170" cy="120" r="4" fill="#7ebaff"/>
+            <text x="155" y="112" fill="#7ebaff" font-size="10">B/E $93.50</text>
+            <text x="250" y="85" fill="#9ceeab" font-size="11" font-weight="700">+$150 Profit</text>
+            <text x="20" y="160" fill="#ffada3" font-size="11" font-weight="700">-$350 Loss</text>
+          </g>
+
+          <!-- Bear Call: Short $105, Long $110, Credit $1.50 -> Max Gain +150, Max Loss -350, BE $106.50 -->
+          <g transform="translate(390, 20)">
+            <text x="0" y="20" fill="#7ebaff" font-size="13" font-weight="700">Bear Call Spread (Sell $105 Call / Buy $110 Call for $1.50 Credit)</text>
+            <line x1="20" y1="120" x2="320" y2="120" stroke="#344354" stroke-width="1.5"/>
+            <!-- $105 -> x=140, $110 -> x=240, BE $106.50 -> x=170 -->
+            <polyline points="20,97.5 140,97.5 240,172.5 320,172.5" fill="none" stroke="#7ebaff" stroke-width="3"/>
+            <circle cx="140" cy="97.5" r="4" fill="#ffd089"/>
+            <text x="120" y="85" fill="#ffd089" font-size="10">Short $105</text>
+            <circle cx="240" cy="172.5" r="4" fill="#ffada3"/>
+            <text x="225" y="188" fill="#ffada3" font-size="10">Long $110</text>
+            <circle cx="170" cy="120" r="4" fill="#7ebaff"/>
+            <text x="155" y="112" fill="#7ebaff" font-size="10">B/E $106.50</text>
+            <text x="35" y="85" fill="#9ceeab" font-size="11" font-weight="700">+$150 Profit</text>
+            <text x="260" y="160" fill="#ffada3" font-size="11" font-weight="700">-$350 Loss</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ Sizing Alignment for $10,000 NZD Account:</strong><br>
+        On our $10,000 NZD account (~$6,000 USD), our strict &le; 2% risk budget is <strong>$120.00 USD ($200 NZD)</strong>.
+        The $5.00-wide spread above ($350 max loss) illustrates standard mechanics, but exceeds our risk budget.
+        In our live portfolio, we trade <strong>$1.00-wide spreads</strong> (e.g. selling a put spread for $0.35 credit &rarr; $65 max loss per contract, allowing exactly 1 contract within our $120 limit).
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 3.1</h2>
+      <div class="question">
+        <strong>Question:</strong> You open a Bull Put Spread by selling a $50 Put and buying a $45 Put, collecting a net credit of $1.60. What is your maximum contractual loss and breakeven price?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Strike width = $50 - $45 = $5.00. Max loss = ($5.00 - $1.60) × 100 = $340 USD. Breakeven = Short Strike ($50.00) - Credit ($1.60) = $48.40!')">
+        A) Max Loss: $340 USD; Breakeven: $48.40
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Remember: Max loss is (Width - Credit) × 100 = ($5.00 - $1.60) × 100 = $340.')">
+        B) Max Loss: $500 USD; Breakeven: $50.00
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'The credit collected ($160) reduces your total downside risk from the $500 strike width.')">
+        C) Max Loss: $160 USD; Breakeven: $45.00
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m3_2: `
+    <div class="eyebrow">Phase 3 · Module 3.2</div>
+    <h1>Vertical Debit Spreads & Directional Exposure</h1>
+
+    <div class="card">
+      <h2>1. Why Buy a Debit Spread Instead of a Single Long Option?</h2>
+      <p>Buying a standalone call or put forces you to fight the clock: every single day, Theta decay erodes the option's value. To generate a profit, the stock must not only move in your direction, it must move <em>fast enough</em> to overcome time decay.</p>
+      
+      <p>A <strong>Vertical Debit Spread</strong> solves this by selling a cheaper Out-of-the-Money option against your purchased option:</p>
+      <ul>
+        <li><strong>Financing Time Decay:</strong> The short leg collects theta decay and volatility value, subsidizing the cost of the purchased option.</li>
+        <li><strong>Lower Breakeven:</strong> Because you pay less net debit, the stock does not need to rally nearly as far to reach profitability.</li>
+        <li><strong>Defined Risk:</strong> Your maximum loss is 100% strictly capped at the net debit paid upfront.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. Ideal Environment & Strike Selection</h2>
+      <ul>
+        <li><strong>Volatility Condition:</strong> Best placed when <strong>IV Rank &lt; 20</strong> (options are historically cheap to purchase).</li>
+        <li><strong>Long Strike Selection:</strong> Buy an In-The-Money option (~60–70 Delta) to capture high intrinsic value and positive directional leverage.</li>
+        <li><strong>Short Strike Selection:</strong> Sell an Out-of-the-Money option (~30–40 Delta) at your target price to cap cost and buffer theta.</li>
+      </ul>
+
+      <div class="callout">
+        <strong>🧮 Math Example: Bull Call Spread (Compliant Sizing)</strong><br>
+        Stock XYZ trades at $50.
+        <ul>
+          <li>Buy $49 Call (65 Delta) for $2.40.</li>
+          <li>Sell $51 Call (35 Delta) for $1.30.</li>
+          <li><strong>Net Debit Paid:</strong> $2.40 - $1.30 = <strong>$1.10 ($110 USD)</strong> &rarr; Max Loss.</li>
+          <li><strong>Strike Width:</strong> $51 - $49 = $2.00 ($200 USD).</li>
+          <li><strong>Max Profit:</strong> ($2.00 - $1.10) &times; 100 = <strong>$90 USD</strong>.</li>
+          <li><strong>Breakeven:</strong> $49 + $1.10 = <strong>$50.10</strong> (at $50.10, profit is $0.00; above $50.10, profit is positive).</li>
+          <li><strong>Risk Budget Compliance:</strong> $110 USD max loss is within our <strong>$120 USD (2%) limit</strong>!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 3.2</h2>
+      <div class="question">
+        <strong>Question:</strong> When is a vertical debit spread preferred over a vertical credit spread?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Correct! When IV Rank is low (< 20), options are historically cheap to buy, making buying debit spreads favorable over selling credits with diminished premium.')">
+        A) When Implied Volatility Rank is low (< 20) and you have strong directional conviction.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'High IV Rank benefits option sellers, not option buyers.')">
+        B) When Implied Volatility Rank is at an all-time high (> 70).
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Debit spreads are directional trades with capped profit and loss, not delta-neutral.')">
+        C) When you expect the stock to stay completely flat.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m3_3: `
+    <div class="eyebrow">Phase 3 · Module 3.3</div>
+    <h1>Poor Man's Covered Call (PMCC)</h1>
+
+    <div class="card">
+      <h2>1. The Small-Account Capital Challenge</h2>
+      <p>A traditional Covered Call requires purchasing 100 shares of stock. If Microsoft (MSFT) trades at $420, 100 shares requires <strong>$42,000 USD (~$70,000 NZD)</strong>. For our $10,000 NZD account, standard covered calls on high-priced large caps are impossible.</p>
+      
+      <p>The <strong>Poor Man's Covered Call (PMCC)</strong>—formally known as a Long Diagonal Call Spread—synthesizes covered call exposure with substantially less capital:</p>
+      <ul>
+        <li>Instead of buying 100 expensive shares, you buy a <strong>deep In-The-Money LEAPS Call (Delta &ge; 0.80) expiring 6–12 months out</strong>.</li>
+        <li>A 0.80 Delta LEAPS behaves locally like 80 shares of stock for a fraction of the share purchase cost.</li>
+        <li>You then sell short Out-of-the-Money calls (30–45 DTE, ~0.25–0.30 Delta) against your LEAPS to collect recurring premium.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. The Exercise Parity Condition (The "Golden Setup Rule")</h2>
+      
+      <div class="callout-warn">
+        <strong>⚠️ Exercise-Based Breakeven Strike:</strong><br>
+        To ensure that an immediate explosive upward gap does not result in an exercise deficit, your short call strike must satisfy this condition:<br>
+        <div style="font-size:16px; font-weight:700; margin-top:6px; color:var(--amber);">
+          Short Call Strike &ge; Long LEAPS Strike + Combined Net Debit Paid (LEAPS Cost - Short Call Credit + Costs)
+        </div>
+        <p style="font-size:13px; margin-top:8px; color:var(--muted);">
+          <em>Example:</em> You buy a $350 LEAPS Call for $70.00 and sell a short call for $5.00. The net debit invested is $65.00 ($70 - $5). Therefore, the exercise parity breakeven strike is <strong>$350 + $65 = $415.00</strong> (not $420). Selling a strike at or above $415 ensures that if both options were exercised simultaneously at expiration, the spread value ($415 - $350 = $65) covers the net debit paid.
+        </p>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-title">📅 PMCC Diagonal Spread Architecture</div>
+        <svg viewBox="0 0 740 210" role="img" aria-label="PMCC Structure Diagram">
+          <rect x="10" y="10" width="720" height="190" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Long LEAPS -->
+          <g transform="translate(35, 30)">
+            <rect x="0" y="0" width="670" height="50" rx="6" fill="#14281e" stroke="#2e5940"/>
+            <text x="20" y="30" fill="#9ceeab" font-size="14" font-weight="700">Long LEAPS Anchor (Deep ITM &Delta; &ge; 0.80, Exp: 6–12 Months Out)</text>
+            <text x="520" y="30" fill="#ffd089" font-size="12">Structural Collateral Leg</text>
+          </g>
+
+          <!-- Short Call Cycles -->
+          <g transform="translate(35, 95)">
+            <rect x="0" y="0" width="150" height="40" rx="6" fill="#2d1717" stroke="#632e2e"/>
+            <text x="75" y="24" text-anchor="middle" fill="#ffada3" font-size="11" font-weight="600">Short Call #1 (45 DTE)</text>
+
+            <rect x="170" y="0" width="150" height="40" rx="6" fill="#2d1717" stroke="#632e2e"/>
+            <text x="245" y="24" text-anchor="middle" fill="#ffada3" font-size="11" font-weight="600">Short Call #2 (45 DTE)</text>
+
+            <rect x="340" y="0" width="150" height="40" rx="6" fill="#2d1717" stroke="#632e2e"/>
+            <text x="415" y="24" text-anchor="middle" fill="#ffada3" font-size="11" font-weight="600">Short Call #3 (45 DTE)</text>
+
+            <rect x="510" y="0" width="160" height="40" rx="6" fill="#1b2e24" stroke="#2e4d3b"/>
+            <text x="590" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">Recurring Premium!</text>
+          </g>
+
+          <text x="45" y="165" fill="#a7b6c8" font-size="12">Each month, time decay erodes the short call. You buy to close at 50% profit and sell the next cycle out!</text>
+        </svg>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ Small-Account Sizing Reality:</strong> A LEAPS contract on a mega-cap stock like MSFT ($7,000 cost) exceeds the total value of a $10,000 NZD account (~$6,000 USD). For our account size, PMCCs are applied only on lower-priced stocks ($15–$25 range), or we prioritize <strong>vertical credit spreads</strong> where risk is strictly capped under $120 USD.
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 3.3</h2>
+      <div class="question">
+        <strong>Question:</strong> You buy a 1-year LEAPS Call at strike $350 for $70.00 and sell a 30-day short call for $5.00. Based on the combined net debit ($65.00), what is the minimum short strike to break even upon simultaneous exercise?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Minimum safe strike = Long Strike ($350) + Combined Net Debit ($70 - $5 = $65) = $415.00. Selling at or above $415 ensures that if assigned and exercised, proceeds cover the net debit.')">
+        A) Strike $415.00 or higher ($350 Long Strike + $65 Net Debit).
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'That adds the full LEAPS debit without crediting the $5 short call premium.')">
+        B) Strike $420.00.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Selling at $350 creates a massive deficit equal to your entire net debit.')">
+        C) Strike $350.00.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m3_4: `
+    <div class="eyebrow">Phase 3 · Module 3.4</div>
+    <h1>Small-Account Wheel Strategy & ETF Puts</h1>
+
+    <div class="card">
+      <div class="visual-card" style="margin-top:0; padding:10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="100%" style="height:auto; display:block;">
+  <defs>
+    <linearGradient id="wheel-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090e14" />
+      <stop offset="100%" stop-color="#101924" />
+    </linearGradient>
+  </defs>
+
+  <!-- Container -->
+  <rect width="900" height="420" rx="14" fill="url(#wheel-bg)" stroke="#293443" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="450" y="40" text-anchor="middle" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="20" font-weight="700">
+    THE SMALL-ACCOUNT WHEEL STRATEGY ENGINE
+  </text>
+  <text x="450" y="62" text-anchor="middle" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="13">
+    A perpetual systematic cash-flow cycle for fundamentally resilient $20–$40 USD underlyings
+  </text>
+
+  <!-- Center Wheel Circle -->
+  <circle cx="450" cy="240" r="80" fill="#121b25" stroke="#334155" stroke-width="2"/>
+  <text x="450" y="235" text-anchor="middle" fill="#ffd089" font-family="system-ui, sans-serif" font-size="16" font-weight="700">THE WHEEL</text>
+  <text x="450" y="255" text-anchor="middle" fill="#9ceeab" font-family="monospace" font-size="11">PERPETUAL INCOME</text>
+
+  <!-- Left: Phase 1 (Cash-Secured Put) -->
+  <g transform="translate(40, 95)">
+    <rect width="320" height="280" rx="10" fill="#14281e" stroke="#2e5940" stroke-width="2"/>
+    <rect x="20" y="18" width="120" height="24" rx="12" fill="#1b422e"/>
+    <text x="80" y="34" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">PHASE 1: THE PUT</text>
+
+    <text x="20" y="68" fill="#9ceeab" font-family="system-ui, sans-serif" font-size="16" font-weight="700">Sell Cash-Secured Put (CSP)</text>
+    <text x="20" y="88" fill="#cbd5e1" font-size="12">• Select 30–45 DTE at 0.20–0.30 Delta</text>
+    <text x="20" y="108" fill="#cbd5e1" font-size="12">• Underlyings priced $20 to $40 USD</text>
+    <text x="20" y="128" fill="#cbd5e1" font-size="12">• Collect 100% of upfront premium</text>
+
+    <line x1="20" y1="145" x2="300" y2="145" stroke="#2e5940"/>
+
+    <text x="20" y="170" fill="#ffd089" font-size="12" font-weight="700">Branch A: Stock stays above strike</text>
+    <text x="20" y="188" fill="#cbd5e1" font-size="11">→ Put expires worthless ($0.00)</text>
+    <text x="20" y="204" fill="#9ceeab" font-size="11">→ Keep 100% cash credit and repeat Phase 1!</text>
+
+    <text x="20" y="232" fill="#ffada3" font-size="12" font-weight="700">Branch B: Stock drops below strike</text>
+    <text x="20" y="250" fill="#cbd5e1" font-size="11">→ Assigned 100 shares at discounted net basis</text>
+    <text x="20" y="266" fill="#7ebaff" font-size="11" font-weight="600">→ Transition seamlessly to Phase 2 →</text>
+  </g>
+
+  <!-- Right: Phase 2 (Covered Call) -->
+  <g transform="translate(540, 95)">
+    <rect width="320" height="280" rx="10" fill="#1b2a3d" stroke="#2a4568" stroke-width="2"/>
+    <rect x="20" y="18" width="130" height="24" rx="12" fill="#203a57"/>
+    <text x="85" y="34" text-anchor="middle" fill="#7ebaff" font-size="11" font-weight="700">PHASE 2: THE CALL</text>
+
+    <text x="20" y="68" fill="#7ebaff" font-family="system-ui, sans-serif" font-size="16" font-weight="700">Sell Covered Call (CC)</text>
+    <text x="20" y="88" fill="#cbd5e1" font-size="12">• You now own 100 shares at net cost basis</text>
+    <text x="20" y="108" fill="#cbd5e1" font-size="12">• Net Basis = Strike - Total Premiums</text>
+    <text x="20" y="128" fill="#cbd5e1" font-size="12">• Sell 30–45 DTE Call ≥ Cost Basis</text>
+
+    <line x1="20" y1="145" x2="300" y2="145" stroke="#2a4568"/>
+
+    <text x="20" y="170" fill="#ffd089" font-size="12" font-weight="700">Branch A: Stock stays below call strike</text>
+    <text x="20" y="188" fill="#cbd5e1" font-size="11">→ Call expires worthless ($0.00)</text>
+    <text x="20" y="204" fill="#9ceeab" font-size="11">→ Basis lowered further; sell next month's call!</text>
+
+    <text x="20" y="232" fill="#9ceeab" font-size="12" font-weight="700">Branch B: Stock rallies above call strike</text>
+    <text x="20" y="250" fill="#cbd5e1" font-size="11">→ Shares called away at target profit price</text>
+    <text x="20" y="266" fill="#ffd089" font-size="11" font-weight="600">→ Cash released! Cycle back to Phase 1 ←</text>
+  </g>
+
+  <!-- Circular connecting curved arrows -->
+  <path d="M 540 140 C 490 100, 410 100, 360 140" fill="none" stroke="#9ceeab" stroke-width="3" stroke-dasharray="6"/>
+  <polygon points="360,140 372,132 370,146" fill="#9ceeab"/>
+
+  <path d="M 360 330 C 410 370, 490 370, 540 330" fill="none" stroke="#7ebaff" stroke-width="3" stroke-dasharray="6"/>
+  <polygon points="540,330 528,338 530,324" fill="#7ebaff"/>
+</svg></div>
+      <h2>1. The Systematic 2-Phase Income Wheel</h2>
+      <p>The <strong>Wheel Strategy</strong> is a mechanical, continuous options cycle designed for stocks or ETFs you are genuinely prepared to own for the long term:</p>
+
+      <div class="visual-card">
+        <div class="visual-title">🔄 The Continuous 2-Phase Wheel Cycle</div>
+        <svg viewBox="0 0 740 240" role="img" aria-label="The Wheel Strategy Cycle">
+          <rect x="10" y="10" width="720" height="220" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Step 1 -->
+          <g transform="translate(45, 35)">
+            <rect x="0" y="0" width="280" height="150" rx="8" fill="#14281e" stroke="#2e5940"/>
+            <text x="20" y="28" fill="#9ceeab" font-size="14" font-weight="700">Phase 1: Cash-Secured Put (CSP)</text>
+            <text x="20" y="55" fill="#a7b6c8" font-size="11">&bull; Sell 30–45 DTE Put (0.20–0.30 Delta)</text>
+            <text x="20" y="75" fill="#a7b6c8" font-size="11">&bull; Underlying price: $20 to $30 USD</text>
+            <text x="20" y="95" fill="#a7b6c8" font-size="11">&bull; If expires OTM &rarr; Keep 100% credit</text>
+            <text x="20" y="125" fill="#ffd089" font-size="12" font-weight="600">If Assigned &rarr; Move to Phase 2!</text>
+          </g>
+
+          <path d="M 335 80 L 395 80" stroke="#ffd089" stroke-width="2"/>
+
+          <!-- Step 2 -->
+          <g transform="translate(405, 35)">
+            <rect x="0" y="0" width="290" height="150" rx="8" fill="#1b2a3d" stroke="#2a4568"/>
+            <text x="20" y="28" fill="#7ebaff" font-size="14" font-weight="700">Phase 2: Covered Call (CC)</text>
+            <text x="20" y="55" fill="#a7b6c8" font-size="11">&bull; You now own 100 shares at assignment</text>
+            <text x="20" y="75" fill="#a7b6c8" font-size="11">&bull; Sell 30–45 DTE Call at or above basis</text>
+            <text x="20" y="95" fill="#a7b6c8" font-size="11">&bull; Economic Basis = Strike - Net Premiums</text>
+            <text x="20" y="125" fill="#9ceeab" font-size="12" font-weight="600">If Called Away &rarr; Return to Phase 1!</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Economic Risk vs. Defined-Risk Spreads</h2>
+      <div class="callout-warn">
+        <strong>⚠️ Critical Distinction: Asset Acquisition vs. Defined Risk (&le; 2%):</strong><br>
+        Cash securing a put ensures you have funds to purchase shares upon assignment; <strong>it does not make the trade low risk</strong>.<br>
+        Selling a $30 CSP and collecting $1.50 premium risks <strong>$2,850 USD (~$4,750 NZD)</strong> if the company collapses to zero—representing <strong>47.5% of our entire account</strong>!<br>
+        Therefore, the Wheel is an <strong>equity investment and asset-acquisition strategy</strong>, NOT a &le; 2% defined-risk trade. If traded on a small account, choose stable ETFs ($20–$30) or use defined-risk vertical spreads.
+      </div>
+
+      <p><strong>Tracking Adjusted Economic Basis:</strong></p>
+      <ul>
+        <li>If assigned 100 shares at $30 after collecting $1.50 premium, your adjusted cost basis is <strong>$28.50 per share</strong> ($2,850 net cash outlay).</li>
+        <li>If the stock trades at $28.00 at assignment, you hold an immediate <strong>$50 unrealized economic loss</strong>. Subsequent covered calls generate additional cash flow to lower this economic breakeven over time.</li>
+      </ul>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 3.4</h2>
+      <div class="question">
+        <strong>Question:</strong> You sell a $30 CSP on stock XYZ and collect $1.50 in premium. At expiration, XYZ is trading at $28, and you are assigned 100 shares. What is your adjusted economic breakeven cost basis per share?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Net Economic Basis = Strike Price ($30.00) - Premium Collected ($1.50) = $28.50. You own 100 shares with an effective cash outlay of $28.50 per share.')">
+        A) $28.50 per share ($30 strike - $1.50 premium collected).
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'The premium you received reduces your effective net cash purchase price.')">
+        B) $30.00 per share.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Current market price ($28) is the market quote, not your net cash outlay basis.')">
+        C) $28.00 per share.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m3_5: `
+    <div class="eyebrow">Phase 3 · Module 3.5</div>
+    <h1>Range-Bound Strategies (Iron Condors)</h1>
+
+    <div class="card">
+      <h2>1. The Range-Bound Architecture</h2>
+      <p>An <strong>Iron Condor</strong> combines two vertical credit spreads on the same underlying asset and expiration date:</p>
+      <ul>
+        <li><strong>Bull Put Spread (Lower Wing):</strong> Sell OTM Put ($K_2$), Buy further OTM Put ($K_1$).</li>
+        <li><strong>Bear Call Spread (Upper Wing):</strong> Sell OTM Call ($K_3$), Buy further OTM Call ($K_4$).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. Iron Condor Mathematics & Collateral Treatment</h2>
+      <p>For ordered, non-overlapping wings ($K_1 < K_2 < K_3 < K_4$):</p>
+      <ul>
+        <li><strong>Max Profit:</strong> Total Net Credit Collected (Put Wing Credit + Call Wing Credit) &times; 100.</li>
+        <li><strong>Max Contractual Loss:</strong> <code>100 &times; (Larger Wing Width - Total Net Credit)</code>.</li>
+        <li><strong>Breakeven Points:</strong>
+          <ul>
+            <li>Lower Breakeven = Short Put Strike - Total Net Credit</li>
+            <li>Upper Breakeven = Short Call Strike + Total Net Credit</li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="visual-card">
+        <div class="visual-title">⛺ The Iron Condor "Profit Tent"</div>
+        <svg viewBox="0 0 740 230" role="img" aria-label="Iron Condor Payoff Diagram">
+          <rect x="10" y="10" width="720" height="210" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Payoff Line: Put wing $90/$95, Call wing $105/$110. Total Credit $2.20. Max Profit +$220, Max Loss -$280 -->
+          <!-- Breakevens: $92.80 and $107.20 -->
+          <g transform="translate(30, 20)">
+            <line x1="20" y1="120" x2="660" y2="120" stroke="#344354" stroke-width="1.5"/>
+            <!-- Tent Polyline: Linear dollar mapping: Zero=120, +220 -> Y=76, -280 -> Y=176 -->
+            <!-- $90 -> x=140, $92.80 (BE) -> x=196, $95 -> x=240, $105 -> x=440, $107.20 (BE) -> x=484, $110 -> x=540 -->
+            <polyline points="20,176 140,176 240,76 440,76 540,176 660,176" fill="none" stroke="#9ceeab" stroke-width="3"/>
+            <!-- Markers -->
+            <circle cx="140" cy="176" r="4" fill="#ffada3"/>
+            <text x="115" y="195" fill="#ffada3" font-size="10">Long $90 P</text>
+            <circle cx="240" cy="76" r="4" fill="#ffd089"/>
+            <text x="215" y="65" fill="#ffd089" font-size="10">Short $95 P</text>
+            
+            <circle cx="196" cy="120" r="4" fill="#7ebaff"/>
+            <text x="175" y="135" fill="#7ebaff" font-size="10">B/E $92.80</text>
+
+            <circle cx="440" cy="76" r="4" fill="#ffd089"/>
+            <text x="430" y="65" fill="#ffd089" font-size="10">Short $105 C</text>
+            <circle cx="540" cy="176" r="4" fill="#ffada3"/>
+            <text x="525" y="195" fill="#ffada3" font-size="10">Long $110 C</text>
+
+            <circle cx="484" cy="120" r="4" fill="#7ebaff"/>
+            <text x="475" y="135" fill="#7ebaff" font-size="10">B/E $107.20</text>
+
+            <rect x="280" y="85" width="180" height="30" rx="4" fill="#1b2e24" stroke="#2e4d3b"/>
+            <text x="370" y="105" text-anchor="middle" fill="#9ceeab" font-size="12" font-weight="700">Max Profit (+$220 USD)</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="callout-warn">
+        <strong>⚠️ Margin Collateral vs. Small-Account Limits:</strong><br>
+        Because the underlying stock cannot simultaneously finish below the put strike and above the call strike at expiration, standard margin rules only require collateral for the <strong>wider wing</strong>.<br>
+        However, for a $10,000 NZD account ($120 USD risk budget), a $5-wide condor ($280 max loss) exceeds our 2% limit! To trade iron condors in this account, use <strong>$1.00-wide wings</strong> (e.g. collecting $0.40 total credit &rarr; $60 max contractual loss, which complies with our risk budget).
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 3.5</h2>
+      <div class="question">
+        <strong>Question:</strong> An iron condor has $5.00-wide wings on both sides and collects a total net credit of $2.20 ($220 USD). What is the maximum contractual loss at expiration?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Max Loss = 100 × (Wing Width - Total Credit) = 100 × ($5.00 - $2.20) = $280 USD. Collateral is required for only one wing.')">
+        A) $280 USD (100 × ($5.00 - $2.20)).
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'That ignores the $220 credit collected, which offsets downside loss.')">
+        B) $500 USD.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'The stock cannot be in two places at once at expiration; both wings cannot simultaneously suffer max loss.')">
+        C) $780 USD ($1,000 width - $220 credit).
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+
+  // Phase 4
+  m4_1: `
+    <div class="eyebrow">Phase 4 · Module 4.1</div>
+    <h1>The $10,000 Allocation Model &amp; Portfolio Heat</h1>
+
+    <div class="card">
+      <div class="visual-card" style="margin-top:0; padding:10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="100%" style="height:auto; display:block;">
+  <defs>
+    <linearGradient id="vault-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090e14" />
+      <stop offset="100%" stop-color="#121b25" />
+    </linearGradient>
+    <linearGradient id="vault-shield" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#183323" />
+      <stop offset="100%" stop-color="#0f1f15" />
+    </linearGradient>
+  </defs>
+
+  <!-- Container -->
+  <rect width="900" height="380" rx="14" fill="url(#vault-bg)" stroke="#293443" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="450" y="38" text-anchor="middle" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="20" font-weight="700">
+    THE $10,000 NZD CAPITAL PRESERVATION VAULT
+  </text>
+  <text x="450" y="60" text-anchor="middle" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="13">
+    Strict defined-risk boundaries separating active trade deployment from portfolio ruin
+  </text>
+
+  <!-- Left: The Account Breakdown -->
+  <g transform="translate(40, 85)">
+    <rect width="380" height="260" rx="10" fill="url(#vault-shield)" stroke="#2e5940" stroke-width="1.5"/>
+    <text x="24" y="36" fill="#9ceeab" font-family="system-ui, sans-serif" font-size="16" font-weight="700">Protected Portfolio Fortress</text>
+    <text x="24" y="55" fill="#cbd5e1" font-size="12">Total Capital Base: <tspan font-weight="700" fill="#f8fafc">$10,000 NZD (~$6,000 USD)</tspan></text>
+
+    <!-- Visual Heat Gauge -->
+    <g transform="translate(24, 75)">
+      <rect width="332" height="35" rx="6" fill="#121a24" stroke="#334155"/>
+      <!-- Active 60% -->
+      <rect width="200" height="35" rx="6" fill="#1b422e"/>
+      <text x="100" y="22" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">Active Collateral (60%)</text>
+      <!-- Reserve 40% -->
+      <text x="266" y="22" text-anchor="middle" fill="#7ebaff" font-size="11" font-weight="700">Cash Reserve (40%)</text>
+    </g>
+
+    <!-- Key Rules -->
+    <g transform="translate(24, 135)">
+      <rect width="332" height="34" rx="6" fill="#0d1620" stroke="#334155"/>
+      <text x="16" y="22" fill="#9ceeab" font-size="12" font-weight="700">🛡️ Max Risk Per Trade:</text>
+      <text x="316" y="22" text-anchor="end" fill="#f8fafc" font-size="12" font-weight="700">≤ 2.0% ($200 NZD / $120 USD)</text>
+
+      <rect y="44" width="332" height="34" rx="6" fill="#0d1620" stroke="#334155"/>
+      <text x="16" y="66" fill="#7ebaff" font-size="12" font-weight="700">🔄 Active Trade Range:</text>
+      <text x="316" y="66" text-anchor="end" fill="#f8fafc" font-size="12" font-weight="700">4 to 6 Non-Correlated Positions</text>
+
+      <rect y="88" width="332" height="34" rx="6" fill="#0d1620" stroke="#334155"/>
+      <text x="16" y="110" fill="#ffd089" font-size="12" font-weight="700">⚡ Sizing Rule:</text>
+      <text x="316" y="110" text-anchor="end" fill="#f8fafc" font-size="12" font-weight="700">Always Floor (⌊⌋) Contracts</text>
+    </g>
+  </g>
+
+  <!-- Right: Defined Risk vs Naked Blow-Up -->
+  <g transform="translate(460, 85)">
+    <rect width="400" height="260" rx="10" fill="#121b25" stroke="#334155" stroke-width="1.5"/>
+    <text x="24" y="36" fill="#ffd089" font-family="system-ui, sans-serif" font-size="16" font-weight="700">Capped Wings vs. The Naked Trap</text>
+    <text x="24" y="55" fill="#cbd5e1" font-size="12">Why retail traders who ignore defined risk go broke</text>
+
+    <!-- Comparison 1: Defined Risk Spread -->
+    <g transform="translate(24, 75)">
+      <rect width="352" height="70" rx="6" fill="#15241d" stroke="#2e5940"/>
+      <text x="16" y="24" fill="#9ceeab" font-size="13" font-weight="700">✅ Defined-Risk Vertical Spread</text>
+      <text x="16" y="44" fill="#cbd5e1" font-size="11">Short Strike + Long Protective Wing</text>
+      <text x="16" y="60" fill="#9ceeab" font-size="11">Worst-Case Loss: Fixed at ($5 width - $1.50 credit) = <tspan font-weight="700" fill="#f8fafc">-$350 USD max</tspan></text>
+    </g>
+
+    <!-- Comparison 2: Naked Short Option -->
+    <g transform="translate(24, 160)">
+      <rect width="352" height="85" rx="6" fill="#2d1717" stroke="#632e2e"/>
+      <text x="16" y="24" fill="#ffada3" font-size="13" font-weight="700">❌ Naked / Uncovered Short Option</text>
+      <text x="16" y="44" fill="#cbd5e1" font-size="11">No protective wing. Subject to 50% earnings gap.</text>
+      <text x="16" y="62" fill="#ffada3" font-size="11">Single Loss: <tspan font-weight="700" fill="#ffada3">-$4,000 to -$10,000+ USD</tspan></text>
+      <text x="16" y="78" fill="#ffd089" font-size="10">Result: 1 trade wipes out entire $10k account equity!</text>
+    </g>
+  </g>
+</svg></div>
+      <h2>1. Deploying the Full $10,000 NZD Capital Base</h2>
+      <p>Rather than locking most of your account in an idle cash vault, your full <strong>$10,000 NZD</strong> equity base is actively available for trading and collateral across diversified, non-correlated positions. Because every trade is <strong>defined risk</strong> (with max loss capped at &le; 2%), you can safely run multiple positions simultaneously without fear of margin blow-up.</p>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="eyebrow">Total Account Equity</div>
+          <div class="stat-val">$10,000 NZD</div>
+          <div class="small muted">~$6,000 USD (at 0.60 FX)</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Max Risk Per Trade</div>
+          <div class="stat-val positive">2.0% ($200 NZD)</div>
+          <div class="small muted">~$120 USD max contractual loss</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Optimal Active Positions</div>
+          <div class="stat-val">4 to 6 Trades</div>
+          <div class="small muted">Non-correlated underlying assets</div>
+        </div>
+        <div class="stat-box">
+          <div class="eyebrow">Aggregate Max Loss</div>
+          <div class="stat-val">8%–12% Total</div>
+          <div class="small muted">If all 4–6 hit max loss simultaneously</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Distinguishing Risk from Collateral Usage</h2>
+      <p>In options trading, you must track three separate metrics:</p>
+      <ul>
+        <li><strong>1. Contractual Risk (Max Loss):</strong> 4 to 6 trades capped at &le; 2% risk each produce an <strong>aggregate maximum contractual loss of 8%–12%</strong>. Even in a severe market shock where every position fails simultaneously, your total loss is capped under 12%.</li>
+        <li><strong>2. Broker Buying-Power Collateral:</strong> For vertical credit spreads, brokers hold the spread width minus credit (or the full width) as collateral. For 4 to 6 spreads, this typically consumes $500–$1,000 USD (~$800–$1,650 NZD) of buying power. If holding a cash-secured position (like the Wheel on a $25 stock), that single trade reserves $2,500 USD.</li>
+        <li><strong>3. Liquid Cash Reserve:</strong> Always preserve <strong>30%–50% of your account in unencumbered cash</strong> ($3,000–$5,000 NZD) to absorb margin fluctuations, accommodate potential assignments, and seize high-IV market dip opportunities.</li>
+      </ul>
+
+      <div class="visual-card">
+        <div class="visual-title">🛡️ $10,000 NZD Capital Allocation Architecture</div>
+        <svg viewBox="0 0 740 220" role="img" aria-label="Portfolio Heat Breakdown">
+          <rect x="10" y="10" width="720" height="200" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Heat Bar -->
+          <g transform="translate(35, 30)">
+            <text x="0" y="18" fill="#f8fafc" font-size="13" font-weight="700">Account Capital Allocation ($10,000 NZD Total / ~$6,000 USD)</text>
+            <rect x="0" y="30" width="670" height="45" rx="6" fill="#1b2a3d" stroke="#334155"/>
+            <!-- 55% Collateral / Active Margin -->
+            <rect x="0" y="30" width="368" height="45" rx="6" fill="#183323" stroke="#2e4d3b"/>
+            <text x="184" y="58" text-anchor="middle" fill="#9ceeab" font-size="13" font-weight="700">Active Collateral: ~$5,500 NZD (55%)</text>
+            <!-- 45% Cash Buffer -->
+            <rect x="368" y="30" width="302" height="45" rx="6" fill="#1b2a3d" stroke="#2a4568"/>
+            <text x="519" y="58" text-anchor="middle" fill="#7ebaff" font-size="13" font-weight="700">Unencumbered Cash: ~$4,500 NZD (45%)</text>
+          </g>
+
+          <!-- Position boxes -->
+          <g transform="translate(35, 120)">
+            <rect x="0" y="0" width="120" height="60" rx="6" fill="#121b25" stroke="#334155"/>
+            <text x="60" y="22" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="600">SPY Spread</text>
+            <text x="60" y="38" text-anchor="middle" fill="#cbd5e1" font-size="10">Risk: $110 USD</text>
+            <text x="60" y="52" text-anchor="middle" fill="#ffd089" font-size="9">Collateral: $200</text>
+
+            <rect x="135" y="0" width="120" height="60" rx="6" fill="#121b25" stroke="#334155"/>
+            <text x="195" y="22" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="600">XLE Spread</text>
+            <text x="195" y="38" text-anchor="middle" fill="#cbd5e1" font-size="10">Risk: $65 USD</text>
+            <text x="195" y="52" text-anchor="middle" fill="#ffd089" font-size="9">Collateral: $100</text>
+
+            <rect x="270" y="0" width="120" height="60" rx="6" fill="#121b25" stroke="#334155"/>
+            <text x="330" y="22" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="600">XLV Spread</text>
+            <text x="330" y="38" text-anchor="middle" fill="#cbd5e1" font-size="10">Risk: $70 USD</text>
+            <text x="330" y="52" text-anchor="middle" fill="#ffd089" font-size="9">Collateral: $100</text>
+
+            <rect x="405" y="0" width="120" height="60" rx="6" fill="#121b25" stroke="#334155"/>
+            <text x="465" y="22" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="600">XLF Spread</text>
+            <text x="465" y="38" text-anchor="middle" fill="#cbd5e1" font-size="10">Risk: $65 USD</text>
+            <text x="465" y="52" text-anchor="middle" fill="#ffd089" font-size="9">Collateral: $100</text>
+
+            <rect x="540" y="0" width="130" height="60" rx="6" fill="#152230" stroke="#2a4568"/>
+            <text x="605" y="24" text-anchor="middle" fill="#ffd089" font-size="11" font-weight="700">Total Risk: $310</text>
+            <text x="605" y="44" text-anchor="middle" fill="#9ceeab" font-size="10">5.2% of Account</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 4.1</h2>
+      <div class="question">
+        <strong>Question:</strong> If you hold 5 independent defined-risk credit spreads that each carry a 2.0% maximum loss, what is your portfolio's aggregate maximum contractual loss?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! 5 positions × 2.0% max loss = 10.0% aggregate maximum loss. Even in a worst-case tail-risk scenario where every position fails, you preserve 90% of your capital!')">
+        A) 10.0% maximum total portfolio loss ($1,000 NZD / ~$600 USD).
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Each position is capped at 2%, so 5 positions total 10%, not 50%.')">
+        B) 50.0% maximum total loss.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Defined-risk spreads cap your loss strictly at the long wing.')">
+        C) 100% total loss if market drops.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m4_2: `
+    <div class="eyebrow">Phase 4 · Module 4.2</div>
+    <h1>The Position Sizing Formula &amp; Contract Limits</h1>
+
+    <div class="card">
+      <h2>1. The Mathematical 2% Sizing Equation</h2>
+      <p>Position sizing is the single most powerful defense against account ruin. Never guess how many contracts to trade. Calculate it mechanically, including trading costs:</p>
+
+      <div class="formula-banner">
+        Contracts = &lfloor; (Account Equity NZD &times; FX Rate &times; 2%) / (Max Loss per Spread USD + Fees USD) &rfloor;
+      </div>
+
+      <div class="callout">
+        <strong>Floor Function (&lfloor; &rfloor;):</strong> Always round <strong>DOWN</strong> to the nearest whole integer. If the formula calculates 1.8 contracts, you trade <strong>exactly 1 contract</strong>. Never round up to 2 contracts, which would violate your 2% risk ceiling!
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Sizing Cheat-Sheet for $10,000 NZD (~$6,000 USD Base)</h2>
+      <p>With an account equity of $10,000 NZD (~$6,000 USD at 0.60 FX), your <strong>2% maximum risk budget is $120.00 USD ($200 NZD)</strong>. Factoring in an estimated $2.00 round-trip fee per spread:</p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Spread Width</th><th>Net Credit Collected</th><th>Max Contractual Loss + Fee</th><th>Max Risk Budget</th><th>Max Contracts Allowed</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>$1.00 Wide</strong></td><td>$0.35 ($35 USD)</td><td>$65.00 + $2 = $67.00 USD</td><td>$120.00 USD</td><td><strong style="color:var(--mint)">&lfloor; 120 / 67 &rfloor; = 1 Contract</strong></td></tr>
+            <tr><td><strong>$2.00 Wide</strong></td><td>$0.70 ($70 USD)</td><td>$130.00 + $2 = $132.00 USD</td><td>$120.00 USD</td><td><strong style="color:var(--loss)">&lfloor; 120 / 132 &rfloor; = 0 (Pass Trade!)</strong></td></tr>
+            <tr><td><strong>$2.50 Wide</strong></td><td>$0.85 ($85 USD)</td><td>$165.00 + $2 = $167.00 USD</td><td>$120.00 USD</td><td><strong style="color:var(--loss)">&lfloor; 120 / 167 &rfloor; = 0 (Pass Trade!)</strong></td></tr>
+            <tr><td><strong>$5.00 Wide</strong></td><td>$1.70 ($170 USD)</td><td>$330.00 + $2 = $332.00 USD</td><td>$120.00 USD</td><td><strong style="color:var(--loss)">&lfloor; 120 / 332 &rfloor; = 0 (Pass Trade!)</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout-warn">
+        <strong>💡 Strict Small-Account Rule:</strong> On a $10,000 NZD account, trade <strong>$1.00 to $1.50 wide spreads</strong>. A $2.00 or $2.50-wide spread ($132–$167 risk) exceeds the $120 USD risk budget and must be passed. Never widen your risk budget beyond 2% to force a trade!
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 4.2</h2>
+      <div class="question">
+        <strong>Question:</strong> Your account equity is $10,000 NZD ($6,000 USD). A proposed credit spread has a maximum loss of $130 USD plus $2 fees. How many contracts does our strict 2% rule permit?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Correct! 2% of $6,000 USD is $120 USD. Sizing = &lfloor; 120 / 132 &rfloor; = 0 contracts. You must pass on this trade or narrow the strike width to fit the $120 budget!')">
+        A) 0 contracts (Pass on the trade or select a narrower $1.00 strike width).
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, '1 contract risks $132 USD, which exceeds the $120 (2%) ceiling. Never compromise the 2% rule.')">
+        B) 1 contract (Close enough to 2%).
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m4_3: `
+    <div class="eyebrow">Phase 4 · Module 4.3</div>
+    <h1>Midpoints, Order Execution &amp; Slippage Management</h1>
+
+    <div class="card">
+      <h2>1. Bid-Ask Spread Dynamics &amp; Liquidity</h2>
+      <p>When you trade options, you interact with market makers who provide continuous liquidity by quoting a <strong>Bid</strong> (where they buy from you) and an <strong>Ask</strong> (where they sell to you). Market makers earn this spread to compensate for inventory risk and order processing.</p>
+      
+      <p>If you submit a <strong>Market Order</strong>, you cross the spread and immediately absorb that entire friction. For a $10,000 NZD account, execution drag can silently erode your mathematical edge:</p>
+      <ul>
+        <li>If an option is quoted at <strong>$1.00 Bid / $1.40 Ask</strong> (midpoint $1.20), entering at market ($1.40) and exiting at market ($1.00) loses <strong>$40.00 USD per contract</strong> in round-trip slippage ($20 each side relative to midpoint).</li>
+        <li>On our $10,000 NZD account, $40 USD equals <strong>$66.67 NZD (0.67% of account equity)</strong> lost on friction alone!</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. The "Walking the Limit Order" Protocol</h2>
+      <p>Always enter orders using <strong>Limit Orders starting at the Midpoint</strong>:</p>
+
+      <div class="visual-card">
+        <div class="visual-title">🪜 The 3-Step Execution Protocol</div>
+        <svg viewBox="0 0 740 180" role="img" aria-label="Limit Order Execution Ladder">
+          <rect x="10" y="10" width="720" height="160" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <!-- Step 1 -->
+          <g transform="translate(30, 25)">
+            <rect x="0" y="0" width="200" height="110" rx="6" fill="#14281e" stroke="#2e5940"/>
+            <text x="100" y="24" text-anchor="middle" fill="#9ceeab" font-size="13" font-weight="700">Step 1: The Midpoint</text>
+            <text x="20" y="55" fill="#cbd5e1" font-size="11">&bull; Bid: $1.00 | Ask: $1.20</text>
+            <text x="20" y="75" fill="#9ceeab" font-size="11" font-weight="700">&bull; Limit Order at: $1.10</text>
+            <text x="20" y="95" fill="#ffd089" font-size="10">&bull; Wait 45–60 seconds</text>
+          </g>
+
+          <line x1="230" y1="80" x2="270" y2="80" stroke="#7ebaff" stroke-width="2"/>
+
+          <!-- Step 2 -->
+          <g transform="translate(270, 25)">
+            <rect x="0" y="0" width="200" height="110" rx="6" fill="#1b2a3d" stroke="#2a4568"/>
+            <text x="100" y="24" text-anchor="middle" fill="#7ebaff" font-size="13" font-weight="700">Step 2: Micro-Adjust</text>
+            <text x="20" y="55" fill="#cbd5e1" font-size="11">&bull; If unfilled after 1 min</text>
+            <text x="20" y="75" fill="#7ebaff" font-size="11" font-weight="700">&bull; Walk by $0.01 ($1.09)</text>
+            <text x="20" y="95" fill="#ffd089" font-size="10">&bull; Wait another 30 seconds</text>
+          </g>
+
+          <line x1="470" y1="80" x2="510" y2="80" stroke="#7ebaff" stroke-width="2"/>
+
+          <!-- Step 3 -->
+          <g transform="translate(510, 25)">
+            <rect x="0" y="0" width="200" height="110" rx="6" fill="#2d1717" stroke="#632e2e"/>
+            <text x="100" y="24" text-anchor="middle" fill="#ffada3" font-size="13" font-weight="700">Step 3: The Hard Stop</text>
+            <text x="20" y="55" fill="#cbd5e1" font-size="11">&bull; Never surrender &gt; $0.03</text>
+            <text x="20" y="75" fill="#ffada3" font-size="11" font-weight="700">&bull; If still unfilled: CANCEL</text>
+            <text x="20" y="95" fill="#ffd089" font-size="10">&bull; Walk away! Do not chase.</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 4.3</h2>
+      <div class="question">
+        <strong>Question:</strong> A credit spread has a Bid of $0.80 and an Ask of $1.10. What price should you enter for your initial limit order?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Midpoint = (0.80 + 1.10) / 2 = $0.95. Never sell at the bid of $0.80, which surrenders $15.00 per contract to market friction upfront!')">
+        A) Exact Midpoint: $0.95 limit order.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Selling at the bid ($0.80) immediately surrenders $15.00 USD relative to the fair midpoint.')">
+        B) The Bid price: $0.80 limit order.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m4_4: `
+    <div class="eyebrow">Phase 4 · Module 4.4</div>
+    <h1>Managing Exits &amp; The Reality of Rolling</h1>
+
+    <div class="card">
+      <h2>1. The 50% Profit Rule: Why Exit Early?</h2>
+      <p>Closing credit spreads at <strong>50% of maximum profit</strong> produces superior risk-adjusted returns over time:</p>
+      <ul>
+        <li><strong>Eliminates Tail Risk:</strong> You collect the first 50% of credit in the first ~15–20 days. Squeezing the remaining 50% requires holding through the final 25 days where Gamma risk accelerates sharply!</li>
+        <li><strong>Frees Collateral for Compounding:</strong> Closing early frees up buying power to redeploy into fresh 45 DTE cycles.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. The Reality of "Rolling" Losing Trades</h2>
+      <div class="callout-warn">
+        <strong>⚠️ Understanding Rolling:</strong><br>
+        Rolling is <strong>NOT</strong> moving a trade forward in time. Rolling is <strong>closing a losing position at a realized dollar loss</strong> and opening a completely brand-new trade on a future expiration date.
+      </div>
+
+      <p>When evaluating a roll:</p>
+      <ul>
+        <li><strong>Rule 1: Always Roll for a Net Credit.</strong> Never pay a debit to roll a losing trade. If you cannot collect a net credit, accept the loss and move on.</li>
+        <li><strong>Rule 2: Don't Defend a Broken Thesis.</strong> If the company failed earnings, was downgraded, or broke fundamental support, close the trade. Do not allocate good capital to broken trades.</li>
+        <li><strong>Rule 3: Recalculate Position Sizing:</strong> Because a roll opens a new trade, verify that its maximum loss complies with your 2% risk budget against your current account equity.</li>
+      </ul>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 4.4</h2>
+      <div class="question">
+        <strong>Question:</strong> You sold a credit spread for $1.50 credit 18 days ago. Today it can be bought to close for $0.70. What is the disciplined action?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! You have captured $0.80 of profit (>50% of the $1.50 credit) in 18 days. Buy to close, lock in the gain, and redeploy collateral!')">
+        A) Buy to close immediately: you have captured over 50% of max profit early.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Holding to expiration risks a reversal for only $70 in remaining profit.')">
+        B) Hold to expiration to squeeze out the remaining $70.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+  m4_5: `
+    <div class="eyebrow">Phase 4 · Module 4.5</div>
+    <h1>The 7-Point Pre-Trade Gate</h1>
+
+    <div class="card">
+      <h2>1. The Pre-Trade Checklist</h2>
+      <p>Every candidate trade must pass this <strong>7-Point Gate</strong> before clicking Submit:</p>
+
+      <div class="visual-card">
+        <div class="visual-title">🚦 The 7-Point Pre-Trade Gate</div>
+        <svg viewBox="0 0 740 250" role="img" aria-label="7-Point Checklist Flowchart">
+          <rect x="10" y="10" width="720" height="230" rx="10" fill="#090e14" stroke="#293443"/>
+
+          <g transform="translate(30, 25)">
+            <rect x="0" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="47" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">1. Liquidity</text>
+            <text x="47" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">OI &gt; 500</text>
+            <text x="47" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">Spread &le; $0.10</text>
+
+            <rect x="105" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="152" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">2. IV Rank</text>
+            <text x="152" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">IVR &gt; 35</text>
+            <text x="152" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">Seller Edge</text>
+
+            <rect x="210" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="257" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">3. Catalyst</text>
+            <text x="257" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">No Earnings</text>
+            <text x="257" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">Check Ex-Div</text>
+
+            <rect x="315" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="362" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">4. Support</text>
+            <text x="362" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">Above 200 EMA</text>
+            <text x="362" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">Key Levels</text>
+
+            <rect x="420" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="467" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">5. Defined</text>
+            <text x="467" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">Both Legs Set</text>
+            <text x="467" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">Zero Naked</text>
+
+            <rect x="525" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="572" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">6. Sizing</text>
+            <text x="572" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">Max Loss &le; 2%</text>
+            <text x="572" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">&le; $120 USD</text>
+
+            <rect x="630" y="0" width="95" height="70" rx="6" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="677" y="24" text-anchor="middle" fill="#9ceeab" font-size="11" font-weight="700">7. Midpoint</text>
+            <text x="677" y="44" text-anchor="middle" fill="#cbd5e1" font-size="9">Limit Order</text>
+            <text x="677" y="58" text-anchor="middle" fill="#9ceeab" font-size="9">Low Slippage</text>
+          </g>
+
+          <g transform="translate(35, 120)">
+            <rect x="0" y="0" width="670" height="70" rx="8" fill="#14281e" stroke="#2e4d3b"/>
+            <text x="335" y="30" text-anchor="middle" fill="#9ceeab" font-size="14" font-weight="700">All 7 Checks Passed? &rarr; Execute with Confidence! &check;</text>
+            <text x="335" y="52" text-anchor="middle" fill="#cbd5e1" font-size="12">If even 1 check fails, do NOT compromise your rules. Walk away to the next trade.</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card quiz-container">
+      <h2>🧠 Check Your Understanding: Module 4.5</h2>
+      <div class="question">
+        <strong>Question:</strong> An attractive trade setup passes 6 out of the 7 checks, but the company reports earnings next Tuesday (14 days before expiration). What is the correct action?
+      </div>
+      <button class="quiz-option" onclick="checkQuiz(this, true, 'Spot on! Never sell options through binary earnings announcements. The 7-Point Gate is non-negotiable; passing 6 of 7 is a FAIL!')">
+        A) Pass on the trade. Binary earnings announcements create unpredictable gap risk.
+      </button>
+      <button class="quiz-option" onclick="checkQuiz(this, false, 'Earnings can cause 20%+ overnight gaps that breach both strikes instantly.')">
+        B) Execute anyway because 6 out of 7 is an 85% pass rate.
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+`,
+
+  // Interactive Tools
+  tool_payoff: `
+    <div class="eyebrow">Interactive Laboratory</div>
+    <h1>Credit Spread Payoff Lab</h1>
+
+    <div class="card">
+      <p>Configure spread parameters below to visualize the expiration payoff curve, zero-line breakeven, and risk-to-reward dynamics mapped with exact mathematical precision:</p>
+      
+      <div class="grid-2">
+        <div class="setup-panel">
+          <h3 style="margin-top:0;">1. Spread Parameters</h3>
+          
+          <div class="field">
+            <label>Strategy Type: 
+              <select id="lab_strategy" onchange="updatePayoffLab()" style="margin-top:4px;">
+                <option value="bull_put">Bull Put Spread (Credit Put)</option>
+                <option value="bear_call">Bear Call Spread (Credit Call)</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Underlying Stock Price: <strong id="lbl_stock">$100.00</strong>
+              <input type="range" id="lab_stock" min="70" max="130" value="100" step="1" oninput="updatePayoffLab()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Short Strike (Sold Leg): <strong id="lbl_short">$95.00</strong>
+              <input type="range" id="lab_short" min="75" max="125" value="95" step="1" oninput="updatePayoffLab()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Spread Width: <strong id="lbl_width">$5.00 wide</strong>
+              <input type="range" id="lab_width" min="1" max="10" value="5" step="1" oninput="onWidthChange()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Net Credit Collected: <strong id="lbl_credit">$1.50 / sh</strong>
+              <input type="range" id="lab_credit" min="0.10" max="4.50" value="1.50" step="0.05" oninput="updatePayoffLab()">
+            </label>
+          </div>
+
+          <div id="lab_warning" style="display:none; color:var(--loss); font-size:12px; margin-top:8px; font-weight:600;"></div>
+        </div>
+
+        <div>
+          <div class="stat-grid" style="margin-top:0;">
+            <div class="stat-box">
+              <div class="eyebrow">Max Profit</div>
+              <div class="stat-val positive" id="lab_max_profit">+$150 USD</div>
+              <div class="small muted">Credit × 100</div>
+            </div>
+            <div class="stat-box">
+              <div class="eyebrow">Max Contractual Loss</div>
+              <div class="stat-val negative" id="lab_max_loss">-$350 USD</div>
+              <div class="small muted">(Width - Credit) × 100</div>
+            </div>
+            <div class="stat-box">
+              <div class="eyebrow">Breakeven Point</div>
+              <div class="stat-val" id="lab_breakeven">$93.50</div>
+              <div class="small muted">Exact zero P&L price</div>
+            </div>
+            <div class="stat-box">
+              <div class="eyebrow">Risk-to-Reward</div>
+              <div class="stat-val" id="lab_rr">2.33 : 1</div>
+              <div class="small muted">Max Risk vs Max Profit</div>
+            </div>
+          </div>
+
+          <div class="visual-card" style="margin-bottom:0;">
+            <div class="visual-title">📈 Dynamic Expiration Payoff Curve</div>
+            <svg id="lab_svg" viewBox="0 0 450 220" style="max-height:220px; width:100%; display:block;">
+              <!-- Rendered via JS -->
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+`,
+  tool_calc: `
+    <div class="eyebrow">Quantitative Tool</div>
+    <h1>Position Sizer & Expectancy Calculator</h1>
+
+    <div class="card">
+      <p>Configure your account capital, currency exchange rate, and spread metrics to calculate contract sizing floored against your risk budget (default <strong>2.0%</strong>, adjustable up to <strong>5.0%</strong>), alongside expected value ($EV$):</p>
+
+      <div class="grid-2">
+        <div class="setup-panel">
+          <h3 style="margin-top:0;">Account & Trade Setup</h3>
+          
+          <div class="field">
+            <label>Total Account Equity (NZD):
+              <input type="number" id="calc_equity" value="10000" min="500" step="500" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Exchange Rate (USD per 1 NZD):
+              <input type="number" id="calc_fx" value="0.60" min="0.10" max="2.00" step="0.01" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Max Risk per Trade (%): <strong id="lbl_calc_risk">2.0%</strong> (Default 2.0%, max 5.0%)
+              <input type="range" id="calc_risk" min="0.5" max="5.0" value="2.0" step="0.1" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Spread Width ($):
+              <input type="number" id="calc_width" value="1.00" min="0.50" max="50.00" step="0.50" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Net Credit Collected ($):
+              <input type="number" id="calc_credit" value="0.35" min="0.05" step="0.05" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Round-Trip Trading Fees per Spread ($ USD):
+              <input type="number" id="calc_fees" value="2.00" min="0.00" max="20.00" step="0.50" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Estimated Win Rate (%): <strong id="lbl_calc_winrate">70%</strong>
+              <input type="range" id="calc_winrate" min="40" max="95" value="70" step="1" oninput="updateCalcTool()">
+            </label>
+          </div>
+
+          <div id="calc_error" style="display:none; color:var(--loss); font-size:12px; margin-top:8px; font-weight:600;"></div>
+        </div>
+
+        <div>
+          <div class="stat-grid" style="margin-top:0;">
+            <div class="stat-box">
+              <div class="eyebrow">USD Account Base</div>
+              <div class="stat-val" id="res_usd_equity">$6,000 USD</div>
+              <div class="small muted">NZD Equity &times; FX</div>
+            </div>
+
+            <div class="stat-box">
+              <div class="eyebrow">Max Risk Budget (<span id="res_risk_pct_label">2.0</span>%)</div>
+              <div class="stat-val positive" id="res_risk_budget">$120 USD</div>
+              <div class="small muted" id="res_risk_budget_nzd">~$200 NZD ceiling</div>
+            </div>
+
+            <div class="stat-box">
+              <div class="eyebrow">Loss + Fees per Spread</div>
+              <div class="stat-val negative" id="res_spread_loss">$67 USD</div>
+              <div class="small muted">(Width - Credit) &times; 100 + Fees</div>
+            </div>
+
+            <div class="stat-box contracts-box">
+              <div class="eyebrow" style="color:var(--mint)">Allowed Contracts</div>
+              <div class="stat-val" id="res_contracts" style="color:var(--mint); font-size:30px;">1 Contract</div>
+              <div class="small muted">Strictly floored (&lfloor; &rfloor;) in integer cents</div>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:16px;">
+            <strong>📊 Expected Value (EV) per 1 Spread:</strong>
+            <div style="font-size:19px; font-weight:700; margin:6px 0;" id="res_ev">+$3.00 USD (+$5.00 NZD)</div>
+            <div class="small" id="res_ev_sub" style="line-height:1.4;">
+              Hypothetical two-outcome expiration model: 70% full win ($35) vs 30% full loss ($65) less $2 fees.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+`
+};
+
+function initTheme() {
+  const saved = localStorage.getItem('options_lab_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtn(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('options_lab_theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) {
+    btn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+  }
+}
+
+function showTab(id) {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const clickAttr = btn.getAttribute('onclick') || '';
+    if (clickAttr.includes(`'${id}'`)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  const mobileSelect = document.getElementById('mobileLesson');
+  if (mobileSelect && mobileSelect.value !== id) {
+    mobileSelect.value = id;
+  }
+
+  const content = document.getElementById('content');
+  if (tabs[id]) {
+    content.innerHTML = tabs[id];
+  } else {
+    content.innerHTML = `<div class="card"><h2>Module ${id}</h2><p>Content coming soon...</p></div>`;
+  }
+
+  // Hook tool initializers
+  if (id === 'tool_payoff') {
+    initPayoffLab();
+  } else if (id === 'tool_calc') {
+    initCalcTool();
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function checkQuiz(btn, isCorrect, explanation) {
+  const container = btn.closest('.quiz-container');
+  container.querySelectorAll('.quiz-option').forEach(b => {
+    b.disabled = true;
+    b.style.cursor = 'default';
+  });
+  if (isCorrect) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+  }
+  const fb = container.querySelector('.quiz-feedback');
+  if (fb) {
+    fb.style.display = 'block';
+    fb.className = 'quiz-feedback ' + (isCorrect ? 'positive' : 'negative');
+    fb.innerHTML = (isCorrect ? '✅ <strong>Correct!</strong> ' : '❌ <strong>Incorrect.</strong> ') + explanation;
+  }
+}
+
+// Interactive Payoff Lab
+function initPayoffLab() {
+  updatePayoffLab();
+}
+
+function onWidthChange() {
+  const widthInput = document.getElementById('lab_width');
+  const creditInput = document.getElementById('lab_credit');
+  if (widthInput && creditInput) {
+    const width = parseFloat(widthInput.value) || 5;
+    creditInput.max = (Math.max(0.1, width - 0.1)).toFixed(2);
+    if (parseFloat(creditInput.value) >= width) {
+      creditInput.value = (width * 0.3).toFixed(2);
+    }
+  }
+  updatePayoffLab();
+}
+
+function updatePayoffLab() {
+  const warn = document.getElementById('lab_warning');
+  if (warn) warn.style.display = 'none';
+
+  const strategy = document.getElementById('lab_strategy')?.value || 'bull_put';
+  const stock = parseFloat(document.getElementById('lab_stock')?.value || 100);
+  const shortStrike = parseFloat(document.getElementById('lab_short')?.value || 95);
+  const width = parseFloat(document.getElementById('lab_width')?.value || 5);
+  let credit = parseFloat(document.getElementById('lab_credit')?.value || 1.50);
+
+  if (document.getElementById('lbl_stock')) document.getElementById('lbl_stock').textContent = '$' + stock.toFixed(2);
+  if (document.getElementById('lbl_short')) document.getElementById('lbl_short').textContent = '$' + shortStrike.toFixed(2);
+  if (document.getElementById('lbl_width')) document.getElementById('lbl_width').textContent = '$' + width.toFixed(2) + ' wide';
+  if (document.getElementById('lbl_credit')) document.getElementById('lbl_credit').textContent = '$' + credit.toFixed(2) + ' / sh';
+
+  if (isNaN(stock) || isNaN(shortStrike) || isNaN(width) || isNaN(credit) || width <= 0 || credit <= 0) {
+    if (warn) { warn.textContent = 'Please enter valid positive values for stock, strike, width, and credit.'; warn.style.display = 'block'; }
+    return;
+  }
+  if (credit >= width) {
+    if (warn) { warn.textContent = `Credit ($${credit.toFixed(2)}) must be strictly less than spread width ($${width.toFixed(2)}).`; warn.style.display = 'block'; }
+    return;
+  }
+
+  const longStrike = strategy === 'bull_put' ? shortStrike - width : shortStrike + width;
+  const maxProfit = credit * 100;
+  const maxLoss = (width - credit) * 100;
+  const breakeven = strategy === 'bull_put' ? shortStrike - credit : shortStrike + credit;
+  const rrRatio = maxProfit > 0 ? (maxLoss / maxProfit).toFixed(2) : '0';
+
+  if (document.getElementById('lab_max_profit')) document.getElementById('lab_max_profit').textContent = '+$' + maxProfit.toFixed(0) + ' USD';
+  if (document.getElementById('lab_max_loss')) document.getElementById('lab_max_loss').textContent = '-$' + maxLoss.toFixed(0) + ' USD';
+  if (document.getElementById('lab_breakeven')) document.getElementById('lab_breakeven').textContent = '$' + breakeven.toFixed(2);
+  if (document.getElementById('lab_rr')) document.getElementById('lab_rr').textContent = rrRatio + ' : 1';
+
+  // SVG Payoff Curve
+  const svg = document.getElementById('lab_svg');
+  if (!svg) return;
+
+  const minX = Math.min(stock, shortStrike, longStrike, breakeven) - 10;
+  const maxX = Math.max(stock, shortStrike, longStrike, breakeven) + 10;
+  const rangeX = Math.max(maxX - minX, 1);
+
+  const toX = (val) => 35 + ((val - minX) / rangeX) * 380;
+
+  // Linear P&L to Y mapping
+  const zeroY = 115;
+  const scaleMax = Math.max(maxProfit, maxLoss) * 1.35;
+  const toY = (pnl) => zeroY - (pnl / scaleMax) * 75;
+
+  let points = '';
+  if (strategy === 'bull_put') {
+    const p1 = `${toX(minX)},${toY(-maxLoss)}`;
+    const p2 = `${toX(longStrike)},${toY(-maxLoss)}`;
+    const p3 = `${toX(shortStrike)},${toY(maxProfit)}`;
+    const p4 = `${toX(maxX)},${toY(maxProfit)}`;
+    points = `${p1} ${p2} ${p3} ${p4}`;
+  } else {
+    const p1 = `${toX(minX)},${toY(maxProfit)}`;
+    const p2 = `${toX(shortStrike)},${toY(maxProfit)}`;
+    const p3 = `${toX(longStrike)},${toY(-maxLoss)}`;
+    const p4 = `${toX(maxX)},${toY(-maxLoss)}`;
+    points = `${p1} ${p2} ${p3} ${p4}`;
+  }
+
+  const stockX = toX(stock);
+  const beX = toX(breakeven);
+
+  svg.innerHTML = `
+    <rect x="0" y="0" width="450" height="220" rx="8" fill="#090e14" stroke="#293443"/>
+    <!-- Zero P&L line -->
+    <line x1="25" y1="${zeroY}" x2="425" y2="${zeroY}" stroke="#475569" stroke-width="1.5" stroke-dasharray="3"/>
+    <text x="430" y="${zeroY + 4}" fill="#94a3b8" font-size="10">$0</text>
+
+    <!-- Payoff polyline -->
+    <polyline points="${points}" fill="none" stroke="#9ceeab" stroke-width="3"/>
+
+    <!-- Breakeven point -->
+    <circle cx="${beX}" cy="${zeroY}" r="5" fill="#7ebaff"/>
+    <text x="${beX}" y="${zeroY + 16}" text-anchor="middle" fill="#7ebaff" font-size="10" font-weight="700">B/E $${breakeven.toFixed(2)}</text>
+
+    <!-- Current Stock Price Line -->
+    <line x1="${stockX}" y1="20" x2="${stockX}" y2="190" stroke="#ffd089" stroke-width="2" stroke-dasharray="4"/>
+    <text x="${stockX}" y="28" text-anchor="middle" fill="#ffd089" font-size="11" font-weight="700">Stock $${stock.toFixed(0)}</text>
+
+    <!-- Labels -->
+    <text x="35" y="${toY(maxProfit) - 6}" fill="#9ceeab" font-size="11" font-weight="700">+$${maxProfit.toFixed(0)} Max</text>
+    <text x="35" y="${toY(-maxLoss) + 16}" fill="#ffada3" font-size="11" font-weight="700">-$${maxLoss.toFixed(0)} Max</text>
+  `;
+}
+
+// Interactive Position Sizer & Expectancy Calculator
+function initCalcTool() {
+  updateCalcTool();
+}
+
+function updateCalcTool() {
+  const err = document.getElementById('calc_error');
+  if (err) err.style.display = 'none';
+
+  const equityNZD = parseFloat(document.getElementById('calc_equity')?.value);
+  const fx = parseFloat(document.getElementById('calc_fx')?.value);
+  const riskPct = parseFloat(document.getElementById('calc_risk')?.value || 2.0);
+  const width = parseFloat(document.getElementById('calc_width')?.value);
+  const credit = parseFloat(document.getElementById('calc_credit')?.value);
+  const fees = parseFloat(document.getElementById('calc_fees')?.value || 2.0);
+  const winRatePct = parseFloat(document.getElementById('calc_winrate')?.value || 70);
+
+  if (document.getElementById('lbl_calc_risk')) document.getElementById('lbl_calc_risk').textContent = riskPct.toFixed(1) + '%';
+  if (document.getElementById('res_risk_pct_label')) document.getElementById('res_risk_pct_label').textContent = riskPct.toFixed(1);
+  if (document.getElementById('lbl_calc_winrate')) document.getElementById('lbl_calc_winrate').textContent = winRatePct.toFixed(0) + '%';
+
+  if (isNaN(equityNZD) || equityNZD <= 0 || isNaN(fx) || fx <= 0 || isNaN(width) || width <= 0 || isNaN(credit) || credit <= 0) {
+    if (err) { err.textContent = 'Please enter valid positive values for equity, exchange rate, spread width, and credit.'; err.style.display = 'block'; }
+    return;
+  }
+  if (credit >= width) {
+    if (err) { err.textContent = `Credit ($${credit.toFixed(2)}) must be strictly less than spread width ($${width.toFixed(2)}).`; err.style.display = 'block'; }
+    return;
+  }
+
+  // Integer cents calculation to avoid floating point precision issues
+  const usdEquityCents = Math.round(equityNZD * fx * 100);
+  const usdEquity = usdEquityCents / 100;
+  
+  const riskBudgetCents = Math.floor(usdEquityCents * (riskPct / 100));
+  const riskBudgetUSD = riskBudgetCents / 100;
+  const riskBudgetNZD = equityNZD * (riskPct / 100);
+
+  const contractualLossCents = Math.round((width - credit) * 10000);
+  const feesCents = Math.round((isNaN(fees) ? 0 : fees) * 100);
+  const totalLossPerSpreadCents = contractualLossCents + feesCents;
+  const totalLossPerSpreadUSD = totalLossPerSpreadCents / 100;
+
+  const maxContracts = totalLossPerSpreadCents > 0 ? Math.floor(riskBudgetCents / totalLossPerSpreadCents) : 0;
+
+  // Expectancy calculation (per 1 spread, hypothetical 2-outcome model)
+  const maxWinUSD = credit * 100;
+  const contractualLossUSD = (width - credit) * 100;
+  const winRate = winRatePct / 100;
+  const lossRate = 1 - winRate;
+  const evUSD = (winRate * maxWinUSD) - (lossRate * contractualLossUSD) - (feesCents / 100);
+  const evNZD = fx > 0 ? evUSD / fx : 0;
+
+  if (document.getElementById('res_usd_equity')) document.getElementById('res_usd_equity').textContent = '$' + usdEquity.toLocaleString(undefined, {maximumFractionDigits:0}) + ' USD';
+  if (document.getElementById('res_risk_budget')) document.getElementById('res_risk_budget').textContent = '$' + riskBudgetUSD.toFixed(0) + ' USD';
+  if (document.getElementById('res_risk_budget_nzd')) document.getElementById('res_risk_budget_nzd').textContent = `~$${riskBudgetNZD.toFixed(0)} NZD ceiling`;
+  if (document.getElementById('res_spread_loss')) document.getElementById('res_spread_loss').textContent = '$' + totalLossPerSpreadUSD.toFixed(0) + ' USD';
+  
+  const contractsElem = document.getElementById('res_contracts');
+  if (contractsElem) {
+    if (maxContracts >= 1) {
+      contractsElem.textContent = maxContracts + (maxContracts === 1 ? ' Contract' : ' Contracts');
+      contractsElem.style.color = 'var(--mint)';
+    } else {
+      contractsElem.textContent = '0 (Pass Trade)';
+      contractsElem.style.color = 'var(--loss)';
+    }
+  }
+
+  const evElem = document.getElementById('res_ev');
+  const evSub = document.getElementById('res_ev_sub');
+  if (evElem) {
+    const sign = evUSD >= 0 ? '+' : '';
+    evElem.textContent = `${sign}$${evUSD.toFixed(2)} USD (${sign}$${evNZD.toFixed(2)} NZD)`;
+    evElem.style.color = evUSD >= 0 ? 'var(--mint)' : 'var(--loss)';
+  }
+  if (evSub) {
+    evSub.textContent = `Hypothetical two-outcome model: ${winRatePct}% full win ($${maxWinUSD.toFixed(0)}) vs ${100 - winRatePct}% full loss ($${contractualLossUSD.toFixed(0)}) less $${(feesCents/100).toFixed(2)} fees.`;
+  }
+}
+
+// Initialize
+initTheme();
+showTab('m1_1');
+</script>
+</body>
+</html>
