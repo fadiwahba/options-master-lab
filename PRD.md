@@ -23,3 +23,5 @@ Searchable lessons and glossary; keyboard/touch terminology explanations; browse
 
 ## Workflow and acceptance
 User builds with the primary agent; only native GPT-6 Astra audits. No external Claude/Gemini workers and no Superpowers skills. Build one chapter, audit, fix, re-audit until clear, then commit before the next chapter. Finish with whole-guide audit and local review. Do not publish before user review. No new dependencies beyond D3 and no new automated tests without permission. Check calculations, browser behavior and diff manually. Keep evidence under sources/ and reviews/, not ignored assets/.
+
+Strategy charts distinguish price from time before the plot. P/L charts use USD price ticks, a labelled gain/loss key and a draggable marker with a keyboard slider. Expiry payoff does not claim Greeks. The optional before-expiry European model reports aggregate delta, gamma, daily theta, vega per IV percentage point and rho per rate percentage point. Price dragging holds entered time, IV, rates and dividends fixed. Multi-expiry net Greeks require evaluation before the short expiry. These are hypothetical model sensitivities, not live quotes or forecasts.
