@@ -31,3 +31,5 @@ The same-expiry strategy explorer includes a days-to-expiry slider in model view
 The learning path is self-paced. Its six stages follow the chapters and use demonstrated skills as milestones. Advanced study is optional. Do not impose a fixed weekly timetable or imply the guide copies a paid program.
 
 The model-view IV slider varies a common 1–200% volatility assumption across all same-expiry option legs. It preserves selected stock price and DTE, updates P/L/Greeks/leg curves, and syncs with the numeric IV field. Slider changes round to two decimals. Disable it at zero DTE and explain that IV does not affect expiry payoff.
+
+DTE playback starts only after Play. Advance one calendar day every0.4seconds while preserving stock price, IV and other assumptions. Pause keeps the current DTE; zero stops automatically and offers Replay from the starting horizon. Manual control changes and chart interactions pause playback. Stop timers and remove lifecycle listeners on view/strategy replacement, navigation and workbook render. Pause hidden/pagehide playback. Suppress live-region announcements during playback and restore them when paused. No automatic loop or autoplay.

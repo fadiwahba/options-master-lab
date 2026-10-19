@@ -14,4 +14,6 @@
 
 .time-scenario{padding:.8rem 1rem;margin:1.2rem 0;background:var(--soft);border:1px solid var(--line);border-radius:5px}.time-scenario label{margin:0}.time-scenario input{display:block;min-height:44px}.time-scenario .caption{margin:.3rem 0 0}
 
-.time-scenario label+ .caption+label{margin-top:.8rem}.time-scenario input:disabled{opacity:.45;cursor:not-allowed}
+.time-scenario label~label{margin-top:.8rem}.time-scenario input:disabled{opacity:.45;cursor:not-allowed}
+
+.dte-playback{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem;margin:.35rem 0}.dte-playback button{min-width:5rem;min-height:44px}
