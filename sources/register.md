@@ -36,4 +36,4 @@ D3 official pointer/drag documentation was consulted for local SVG coordinates a
 
 ## Capstones and practice path
 
-Cedar and the two fund holdings examples are original hypothetical exercises, not issuer facts. The 12-week practice schedule is an original suggested pace for this guide, not a reconstruction of inaccessible paid lessons. Primary assignment, IBKR Desktop Strategy Builder and Investor.gov ETF pages re-opened on 19 October 2026. Journal formulas separate cash receipts, closing cash flows, costs and remaining exposures.
+Cedar and the two fund holdings examples are original hypothetical exercises, not issuer facts. The self-paced learning path follows the six chapters and uses skill milestones, with no fixed weekly timetable. Primary assignment, IBKR Desktop Strategy Builder and Investor.gov ETF pages re-opened on 19 October 2026. Journal formulas separate cash receipts, closing cash flows, costs and remaining exposures.
