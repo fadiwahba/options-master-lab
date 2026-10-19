@@ -33,3 +33,7 @@ OIC catalogue verified links for iron condor, long call butterfly, calendar and 
 ## Strategy scenario interaction and sensitivities
 
 D3 official pointer/drag documentation was consulted for local SVG coordinates and interaction. Expiry curves use contractual intrinsic values. Before-expiry curves and analytic Greeks use the stated European Black–Scholes assumptions, with continuous dividend yield and calendar-day theta. Vega/rho use a one-percentage-point change, with contract quantities and the 100-share multiplier applied. OIC model assumptions: https://www.optionseducation.org/advancedconcepts/black-scholes-formula . Price scenarios hold model inputs fixed; the separate time-decay chart varies remaining days and explicitly labels that axis.
+
+## Capstones and practice path
+
+Cedar and the two fund holdings examples are original hypothetical exercises, not issuer facts. The 12-week practice schedule is an original suggested pace for this guide, not a reconstruction of inaccessible paid lessons. Primary assignment, IBKR Desktop Strategy Builder and Investor.gov ETF pages re-opened on 19 October 2026. Journal formulas separate cash receipts, closing cash flows, costs and remaining exposures.
