@@ -1,4 +1,5 @@
 window.Lab={chapters:[],tools:[],visuals:{},glossary:{
+"underlying":["The asset an option contract refers to, such as a stock or ETF.","For an option on a stock, the chart’s underlying price means that stock’s share price."],
 "stock":["A small ownership share in a company.","Owning 10 of 1,000 shares means owning 1% before any dilution."],
 "ETF":["An exchange-traded fund: shares in a portfolio that trades on an exchange.","A broad equity ETF can hold hundreds of companies, but its weights still matter."],
 "dividend":["Cash or other property distributed to shareholders. It is not guaranteed.","A $1 dividend on 10 shares pays $10 before tax."],

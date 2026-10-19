@@ -1,6 +1,6 @@
 Lab.plot=function(host,{series,xlabel,ylabel,caption,zero=true,pnl=false,scenarioValue=null,initialX=null,scenarioDetails=null,onScenario=null,axisNote=null}){
  if(!window.d3){host.innerHTML='<p>Chart library unavailable. Read the worked example and data below.</p>';return;}
- const w=700,h=340,m={left:76,right:22,top:20,bottom:62};
+ const w=Math.max(280,Math.min(700,host.clientWidth||700)),compact=w<520,h=compact?320:340,m={left:compact?68:76,right:22,top:20,bottom:compact?42:62};
  host.innerHTML='';
  const pts=series.flatMap(s=>s.points);
  let xd=d3.extent(pts,p=>p[0]),yd=d3.extent(pts,p=>p[1]);
@@ -21,12 +21,12 @@ Lab.plot=function(host,{series,xlabel,ylabel,caption,zero=true,pnl=false,scenari
   svg.append('rect').attr('class','loss-band').attr('x',m.left).attr('y',base).attr('width',w-m.left-m.right).attr('height',Math.max(0,h-m.bottom-base));
   focusBand=svg.append('rect').attr('class','scenario-band').attr('y',m.top).attr('height',h-m.bottom-m.top).attr('width',18);
  }
- svg.append('g').attr('transform',`translate(0,${h-m.bottom})`).call(d3.axisBottom(x).ticks(6).tickFormat(pnl?v=>'$'+d3.format(",~g")(v):null));
+ svg.append('g').attr('transform',`translate(0,${h-m.bottom})`).call(d3.axisBottom(x).ticks(compact?4:6).tickFormat(pnl?v=>'$'+d3.format(",~g")(v):null));
  svg.append('g').attr('transform',`translate(${m.left},0)`).call(d3.axisLeft(y).ticks(5));
  if(zero)svg.append('line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',y(0)).attr('y2',y(0)).attr('stroke','currentColor').attr('stroke-dasharray','3 5').attr('opacity',.4);
  for(const s of series)svg.append('path').datum(s.points).attr('fill','none').attr('stroke',s.color).attr('stroke-width',3).attr('d',d3.line().x(p=>x(p[0])).y(p=>y(p[1])));
- svg.append('text').attr('x',(m.left+w-m.right)/2).attr('y',h-10).attr('text-anchor','middle').text(xlabel);
- svg.append('text').attr('transform','rotate(-90)').attr('x',-(h-m.bottom)/2).attr('y',18).attr('text-anchor','middle').text(ylabel);
+ if(compact){const axis=document.createElement('p');axis.className='caption';axis.textContent='Horizontal axis: '+xlabel;host.append(axis);}else svg.append('text').attr('x',(m.left+w-m.right)/2).attr('y',h-10).attr('text-anchor','middle').attr('font-size',14).text(xlabel);
+ svg.append('text').attr('transform','rotate(-90)').attr('x',-(h-m.bottom)/2).attr('y',18).attr('text-anchor','middle').attr('font-size',12).text(ylabel);
  if(pnl){
   const readout=document.createElement('div');readout.className='scenario-readout';readout.setAttribute('role','status');host.append(readout);
   const label=document.createElement('label');label.className='scenario-control';label.append('Underlying price scenario (USD)');
