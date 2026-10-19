@@ -29,3 +29,5 @@ Strategy charts distinguish price from time before the plot. P/L charts use USD 
 The same-expiry strategy explorer includes a days-to-expiry slider in model view. It varies time from the entered starting horizon down to zero while preserving the selected underlying price and other assumptions. Zero uses contractual expiry payoff and omits Greeks. The slider remains focused while the chart redraws.
 
 The learning path is self-paced. Its six stages follow the chapters and use demonstrated skills as milestones. Advanced study is optional. Do not impose a fixed weekly timetable or imply the guide copies a paid program.
+
+The model-view IV slider varies a common 1–200% volatility assumption across all same-expiry option legs. It preserves selected stock price and DTE, updates P/L/Greeks/leg curves, and syncs with the numeric IV field. Slider changes round to two decimals. Disable it at zero DTE and explain that IV does not affect expiry payoff.
