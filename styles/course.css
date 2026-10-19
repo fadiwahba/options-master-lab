@@ -17,3 +17,5 @@
 .time-scenario label~label{margin-top:.8rem}.time-scenario input:disabled{opacity:.45;cursor:not-allowed}
 
 .dte-playback{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem;margin:.35rem 0}.dte-playback button{min-width:5rem;min-height:44px}
+
+#storage-alert:not([hidden]){position:sticky;top:0;z-index:20;padding:.8rem 1rem;background:var(--paper);border:2px solid var(--loss)}#storage-alert p{margin:0 0 .5rem}#storage-alert button{font-size:.85rem}@media print{#storage-alert{display:none!important}}
