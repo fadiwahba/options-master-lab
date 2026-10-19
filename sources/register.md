@@ -20,3 +20,9 @@ Checked 2026-10-19. Examples are hypothetical unless a period and issuer filing 
 
 ## Technical analysis
 Fidelity technical-analysis overview, RSI/MACD/Bollinger guide pages linked in chapter, checked 2026-10-19. Replay is original deterministic synthetic OHLC, not historical market data. RSI uses Wilder14, EMA uses initial SMA, MACD12/26 with9signal, Bollinger uses20 population standard deviation ×2. Indicators and axis domains use only revealed bars; early values warm up and can differ from broker histories. No seasonal return statistics asserted.
+
+## Options lifecycle
+IBKR Desktop Strategy Builder and Rollover guide pages checked2026-10-19. Official screenshots ntws-v1.4-1.png and ntws-v1.4-4.png stored locally; originally show simulated Dec2025 data and are labelled illustrative, not user-account captures. The order screenshot is an advanced calendar, used only to locate fields. Attribution on-page.
+OIC source catalogue: https://www.optionseducation.org/strategies/all-strategies-en . Exact covered-call/vertical URLs use full descriptive slugs. Assignment/exercise FAQs and pricing overview linked on lessons. No claims that a one-cent ITM close guarantees assignment.
+Course policy extensions:10% aggregate maximum-loss budget;60% capital-commitment ceiling;25% financed-ownership cap, all labelled as course assumptions, not broker requirements. Example costs$4/set are hypothetical editable total fees/slippage, not a broker quote.
+Payoff engine evaluates piecewise-linear expiry extrema at zero/all strikes and the asymptotic call/share slope, not merely plotted prices. Same-expiry only. Account sizing includes costs and FX; interim gross assignment transactions reported separately.
