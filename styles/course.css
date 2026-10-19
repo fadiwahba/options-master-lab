@@ -11,3 +11,5 @@
 .scenario-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.7rem 1.2rem;margin:.8rem 0 0;font-weight:400}.scenario-metrics dt{font-size:.8rem;color:var(--muted)}.scenario-metrics dd{margin:0;font-size:.93rem;font-weight:600}
 
 .chart-axis-note{font-size:.95rem;font-weight:600;border-left:3px solid var(--accent);padding:.65rem .8rem;background:var(--soft)}
+
+.time-scenario{padding:.8rem 1rem;margin:1.2rem 0;background:var(--soft);border:1px solid var(--line);border-radius:5px}.time-scenario label{margin:0}.time-scenario input{display:block;min-height:44px}.time-scenario .caption{margin:.3rem 0 0}
