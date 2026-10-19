@@ -17,3 +17,6 @@ Checked 2026-10-19. Examples are hypothetical unless a period and issuer filing 
 - Valuation method: https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/val.html . Hypothetical DCF inputs; FCFF/WACC, five years, perpetual terminal growth. Screening FCF is not assumed identical to FCFF.
 - Fund research references checked 2026-10-19: Vanguard VOO, Invesco QQQ, Schwab SCHD and US JPMorgan JEPI issuer pages linked in lesson. No current fee/holdings numbers copied into a timeless lesson.
 - BlackBerry year ended 2014-03-01: about USD $6.8B sales / $5.9B net loss from continuing operations, issuer MD&A. https://www.sec.gov/Archives/edgar/data/1070235/000144530514001205/bbry-03012014x40fexhibit13.htm . Historical contrast, not a current classification.
+
+## Technical analysis
+Fidelity technical-analysis overview, RSI/MACD/Bollinger guide pages linked in chapter, checked 2026-10-19. Replay is original deterministic synthetic OHLC, not historical market data. RSI uses Wilder14, EMA uses initial SMA, MACD12/26 with9signal, Bollinger uses20 population standard deviation ×2. Indicators and axis domains use only revealed bars; early values warm up and can differ from broker histories. No seasonal return statistics asserted.
